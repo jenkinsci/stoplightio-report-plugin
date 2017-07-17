@@ -1,0 +1,99 @@
+[Conductor] Stoplight API Host is https://api-next.stoplight.io
+    
+
+    Setup Scenario (0.002s)
+      , GET  (0.002s)
+         after.info ⁃ 97
+    
+
+    Check Server Scenario (0.011s)
+      Check, GET http://localhost:8080/v2/check (0.011s)
+         ✓  output.status (eq) 200
+         ✓  output.body (validate.contract) against JSON Schema
+    
+
+    Test Categories Scenario (0.052s)
+      List categories, GET http://localhost:8080/v2/categories (0.011s)
+         ✓  output.status (eq) 200
+         ✓  output.body (validate.contract) against JSON Schema
+      Create category, POST http://localhost:8080/v2/categories (0.009s)
+         ✓  output.status (eq) 201
+         ✓  output.body (validate.contract) against JSON Schema
+      Get category, GET http://localhost:8080/v2/categories/9 (0.009s)
+         ✓  output.body.label (eq) Adventure
+         ✓  output.status (eq) 200
+         ✓  output.body (validate.contract) against JSON Schema
+      Update category, PUT http://localhost:8080/v2/categories/9 (0.008s)
+         ✓  output.body.label (eq) Horror
+         ✓  output.status (eq) 200
+         ✓  output.body (validate.contract) against JSON Schema
+      Delete category, DELETE http://localhost:8080/v2/categories/9 (0.006s)
+         ✓  output.status (eq) 204
+         ✓  output.body (validate.contract) against JSON Schema
+      Get category, GET http://localhost:8080/v2/categories/9 (0.008s)
+         ✓  output.status (eq) 404
+         ✓  output.body (validate.contract) against JSON Schema
+    
+
+    Test Books Scenario (0.056s)
+      List books, GET http://localhost:8080/v2/books (0.011s)
+         ✓  output.time (lt) 2000
+         ✓  output.status (eq) 200
+         ✓  output.body (validate.contract) against JSON Schema
+      Create book, POST http://localhost:8080/v2/books (0.007s)
+         ✓  output.status (eq) 201
+         ✓  output.body (validate.contract) against JSON Schema
+      Get book, GET http://localhost:8080/v2/books/9 (0.007s)
+         ✓  output.status (eq) 200
+         ✓  output.body (validate.contract) against JSON Schema
+      Update book, PUT http://localhost:8080/v2/books/9 (0.011s)
+         ✓  output.body.finished (eq) true
+         ✓  output.status (eq) 200
+         ✓  output.body (validate.contract) against JSON Schema
+      Search book, GET http://localhost:8080/v2/books?search=tarte (0.006s)
+         ✓  output.body (validate.contract) against JSON Schema
+      Delete book, DELETE http://localhost:8080/v2/books/9 (0.006s)
+         ✓  output.status (eq) 204
+         ✓  output.body (validate.contract) against JSON Schema
+      Get book, GET http://localhost:8080/v2/books/9 (0.008s)
+         ✓  output.status (eq) 404
+         ✓  output.body.status (eq) NOT_FOUND
+         ✓  output.body (validate.contract) against JSON Schema
+    
+
+    Test Category Errors Scenario (0.064s)
+      Get category, GET http://localhost:8080/v2/categories/5642547 (0.011s)
+         ✓  output.status (eq) 404
+         ✓  output.body.status (eq) NOT_FOUND
+         ✓  output.body (validate.contract) against JSON Schema
+      Update category, PUT http://localhost:8080/v2/categories/5642547 (0.006s)
+         ✓  output.status (eq) 404
+         ✓  output.body (validate.contract) against JSON Schema
+      Update category, PUT http://localhost:8080/v2/categories/5642547 (0.008s)
+         ✓  output.status (eq) 400
+         ✓  output.body.status (eq) BAD_REQUEST
+         ✓  output.body (validate.contract) against JSON Schema
+      Update category, PUT http://localhost:8080/v2/categories/2 (0.009s)
+         ✓  output.status (eq) 403
+         ✓  output.body.status (eq) FORBIDDEN
+         ✓  output.body (validate.contract) against JSON Schema
+      Delete category, DELETE http://localhost:8080/v2/categories/684321 (0.007s)
+         ✓  output.status (eq) 404
+         ✓  output.body (validate.contract) against JSON Schema
+      Delete category, DELETE http://localhost:8080/v2/categories/2 (0.009s)
+         ✓  output.status (eq) 403
+         ✓  output.body (validate.contract) against JSON Schema
+      Create category, POST http://localhost:8080/v2/categories (0.007s)
+         ✓  output.status (eq) 400
+         ✓  output.body.status (eq) BAD_REQUEST
+         ✓  output.body (validate.contract) against JSON Schema
+      Create category, POST http://localhost:8080/v2/categories (0.007s)
+         ✓  output.status (eq) 409
+         ✓  output.body.status (eq) CONFLICT
+         ✓  output.body (validate.contract) against JSON Schema
+         before.info ⁃ Before : Test de trace en log
+         after.error ⁃ Test de trace en erreur
+    
+
+    ✓  53 tests passed
+    

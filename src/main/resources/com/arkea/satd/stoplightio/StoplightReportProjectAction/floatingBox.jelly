@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+<?jelly escape-by-default='true'?>
+
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:local="local">
+
+	<j:set var="projectCollections" value="${action.getProjectCollections()}"/>
+	<j:set var="tr" value="${action.project.lastBuild.getAction(action.class.classLoader.loadClass('com.arkea.satd.stoplightio.StoplightReportBuildAction'))}"/>
+ 
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<div id="chart_div" style="width: 100%; height: 200px;"></div>			
+	
+	<script type="text/javascript">
+	    google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawChart);
+
+		function drawChart() {                                                                
+		                                                                                      
+		  function selectHandler() {                                                          
+		    var selectedItem = chart.getSelection()[0];                                       
+		    if (selectedItem) {                                                               
+		      var topping = data.getValue(selectedItem.row, 0);                               
+	      	  if(topping!='') {                               
+		        window.location.href = topping.substring(1)+"/${tr.urlName}";
+		      }
+		    }                                                                                 
+		  }                                                                                   
+		                                                                                      
+		  var options = {                                                                     
+		    title: 'Scenarios Assertions Trend',                                              
+		    areaOpacity: 0.8,
+		    colors: ['yellow', 'red', 'lightgreen'],
+		    isStacked: true,                                                                                                                                               
+		    reverseCategories : true,
+		    chartArea: {left:30, right:80, top:20, bottom:35},                                                                 
+		    hAxis: {slantedText: true, slantedTextAngle:90},                                                                               
+		    vAxis: {                                                                          
+		      minValue: 0,                                                                    
+		      gridlines: {color : "#000"}
+		    }                                                                                 
+		  };                                                                                  
+		                                                                                      
+		  var data = new google.visualization.DataTable();                                    
+		  data.addColumn('string', 'Build');                                                  
+		  data.addColumn('number', 'No Test');                                                  
+		  data.addColumn('number', 'Failed');                                                 
+		  data.addColumn('number', 'Success');   
+		                                                                                      
+		  var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+		  google.visualization.events.addListener(chart, 'select', selectHandler);
+
+		  <j:forEach var="buildAction" items="${projectCollections}">
+          		data.addRow(['#${buildAction.buildNumber}', ${buildAction.noAssertionCount}, ${buildAction.failedAssertionsCount}, ${buildAction.succeededAssertionsCount}]);
+          </j:forEach>
+
+		  <j:if test="${projectCollections.size() == 1}">
+          		 data.addRow(['', 0, 0, 0]);
+          </j:if>
+
+		  chart.draw(data, options);
+            
+	    }				
+	</script>
+
+</j:jelly>

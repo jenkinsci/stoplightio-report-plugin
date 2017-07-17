@@ -1,0 +1,120 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
+<!--j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:d="jelly:define" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project" -->
+
+
+
+
+    <l:layout norefresh="true">
+        <st:include it="${it.build}" page="sidepanel.jelly"/>
+        <l:main-panel>
+        
+			<style>
+				table.report {
+				    border: 1px solid black;
+				    border-collapse: collapse;
+				    width: 70%;
+				}
+				
+				table.report th, table.report td {
+				    border: 1px solid black;
+				    text-align: center;
+				    padding: 8px;
+				}
+				
+				table.report tr:nth-child(even) {background-color: #f2f2f2}
+				
+				li.notest {
+				   list-style-image : url("${resURL}/plugin/stoplightio/img/warning.png");
+				} 
+				li.failed {
+				   list-style-image : url("${resURL}/plugin/stoplightio/img/failure.png");
+				} 
+				li.passed {
+				   list-style-image : url("${resURL}/plugin/stoplightio/img/success.png");
+				} 
+				
+			</style>
+
+            <h1>Build #${it.buildNumber} : ${it.displayName}</h1>
+            <h2>Summary : </h2>
+
+			  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+			  <div id="chart_div"></div>
+			  <script type="text/javascript">
+			
+				google.charts.load('current', {packages:['corechart']});
+			    google.charts.setOnLoadCallback(drawChart);
+			    function drawChart() {
+			
+			      var data = google.visualization.arrayToDataTable([
+			        ['Build', 'No Test', 'Failed', 'Success' ],
+			        ['', ${it.noAssertionCount}, ${it.failedAssertionsCount}, ${it.succeededAssertionsCount}],
+			      ]);
+					
+			      var options = {
+			        width: 600,
+			        height: 100,
+			        legend: { position: 'top' },
+			        colors: ['yellow', 'red', 'lightgreen'],
+			        isStacked: 'percent',
+			      };
+			
+			      var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+			      chart.draw(data, options);
+			      }
+			    </script>
+
+
+            <h2>Details : </h2>
+
+			<table class="report">
+				<tr>
+					<th>No Test</th>
+					<th>Failed</th>
+					<th>Passed</th>
+					<th>TOTAL</th>
+				</tr>
+				<tr>
+					<td>${it.noAssertionCount}</td>
+					<td>${it.failedAssertionsCount}</td>
+					<td>${it.succeededAssertionsCount}</td>
+					<td>${it.assertionsCount}</td>
+				</tr>
+			</table>
+
+			<j:forEach var="scenario" items="${it.collection.scenarios}">
+				<h2>${scenario.label} (${scenario.duration}) : </h2>
+				<ul>
+					<j:forEach var="step" items="${scenario.steps}">
+						<li><b>${step.label} (${step.duration})</b></li>
+						<ul>
+							<j:choose>
+								<j:when test="${empty step.assertions}">
+									<li class="notest">There is no assertion at all for this step !</li>								
+								</j:when>
+								<j:otherwise>
+									<j:forEach var="assertion" items="${step.assertions}">
+											
+										<j:set var="className" value="failed"/>	
+							            <j:if test="${assertion.success == true}">
+							          		<j:set var="className" value="passed"/>
+							          	</j:if>
+								
+										<li class="${className}">${assertion.success} ${assertion.message}</li>
+									</j:forEach>
+								</j:otherwise>								
+							</j:choose>
+						</ul>
+
+
+					</j:forEach>
+				</ul>
+            </j:forEach>
+            
+	            
+	            
+
+        </l:main-panel>
+    </l:layout>
+</j:jelly>

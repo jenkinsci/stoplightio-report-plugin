@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:t="/lib/hudson" xmlns:test="/lib/hudson/test">
+    <table style="margin-top: 1em; margin-left: 1em;">
+        <j:set var="tr" value="${it.project.lastBuild.getAction(it.class.classLoader.loadClass('com.arkea.satd.stoplightio.StoplightReportBuildAction'))}"/>
+        <j:if test="${tr != null}">
+            <t:summary icon="/plugin/stoplightio/img/scenarios_48x48.png">
+                <a href="lastBuild/${tr.urlName}/">Latest Scenarios Result</a> ( ${tr.noAssertionCount} without test / ${tr.failedAssertionsCount} failure(s) / ${tr.succeededAssertionsCount} success)
+            </t:summary>
+        </j:if>
+    </table>
+</j:jelly>

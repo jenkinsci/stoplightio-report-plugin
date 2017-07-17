@@ -1,0 +1,2422 @@
+{
+  "time": 322.580682,
+  "status": "completed",
+  "failCount": 0,
+  "passCount": 56,
+  "env": {
+    "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+    "bookcasev2-label": "Adventure",
+    "var_de_test": 83
+  },
+  "before": {
+    "syyp": {
+      "id": "syyp",
+      "name": "Setup",
+      "status": "completed",
+      "time": 13,
+      "failCount": 0,
+      "passCount": 0,
+      "ctx": {},
+      "env": {
+        "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+        "bookcasev2-label": "Adventure",
+        "var_de_test": 83
+      },
+      "steps": [
+        {
+          "id": "s1gk",
+          "status": "completed",
+          "time": 12,
+          "failCount": 0,
+          "passCount": 0,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "script",
+          "input": {
+            "script": ""
+          },
+          "output": true,
+          "logs": [
+            {
+              "type": "info",
+              "msg": "83",
+              "source": "after.script"
+            }
+          ]
+        }
+      ],
+      "response": {
+        "time": 0,
+        "status": 0,
+        "headers": {},
+        "body": {}
+      }
+    }
+  },
+  "scenarios": {
+    "bjsl": {
+      "id": "bjsl",
+      "name": "Test Categories",
+      "status": "completed",
+      "time": 144,
+      "failCount": 0,
+      "passCount": 14,
+      "ctx": {},
+      "env": {
+        "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+        "bookcasev2-label": "Adventure",
+        "var_de_test": 83
+      },
+      "steps": [
+        {
+          "id": "s18d",
+          "name": "List categories",
+          "status": "completed",
+          "time": 36,
+          "failCount": 0,
+          "passCount": 2,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "get",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories"
+          },
+          "output": {
+            "body": [
+              {
+                "id": 1,
+                "label": "Drama"
+              },
+              {
+                "id": 2,
+                "label": "Children"
+              },
+              {
+                "id": 3,
+                "label": "Theater"
+              },
+              {
+                "id": 4,
+                "label": "Heroic Fantasy"
+              },
+              {
+                "id": 5,
+                "label": "Novel"
+              },
+              {
+                "id": 6,
+                "label": "string"
+              }
+            ],
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 200,
+            "time": 20
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 200,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "items": {
+                    "allOf": [
+                      {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      {
+                        "properties": {
+                          "label": {
+                            "type": "string"
+                          }
+                        },
+                        "title": "category Input",
+                        "type": "object"
+                      }
+                    ],
+                    "title": "category Output"
+                  },
+                  "type": "array"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "bkeu",
+          "name": "Create category",
+          "status": "completed",
+          "time": 27,
+          "failCount": 0,
+          "passCount": 2,
+          "ctx": {
+            "id": 95
+          },
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": {
+              "label": "Adventure"
+            },
+            "headers": {
+              "content-type": "application/json"
+            },
+            "method": "post",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories"
+          },
+          "output": {
+            "body": {
+              "id": 95,
+              "label": "Adventure"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Location": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories/95",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 201,
+            "time": 22
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 201,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "label": {
+                          "type": "string"
+                        }
+                      },
+                      "title": "category Input",
+                      "type": "object"
+                    }
+                  ],
+                  "title": "category Output"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "s1bl",
+          "name": "Get category",
+          "status": "completed",
+          "time": 19,
+          "failCount": 0,
+          "passCount": 3,
+          "ctx": {
+            "id": 95
+          },
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "get",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories/95"
+          },
+          "output": {
+            "body": {
+              "id": 95,
+              "label": "Adventure"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 200,
+            "time": 15
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.body.label",
+                "op": "eq",
+                "expected": "Adventure",
+                "pass": true
+              },
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 200,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "label": {
+                          "type": "string"
+                        }
+                      },
+                      "title": "category Input",
+                      "type": "object"
+                    }
+                  ],
+                  "title": "category Output"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "hymi",
+          "name": "Update category",
+          "status": "completed",
+          "time": 26,
+          "failCount": 0,
+          "passCount": 3,
+          "ctx": {
+            "id": 95
+          },
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": {
+              "label": "Horror"
+            },
+            "headers": {
+              "content-type": "application/json"
+            },
+            "method": "put",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories/95"
+          },
+          "output": {
+            "body": {
+              "id": 95,
+              "label": "Horror"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 200,
+            "time": 23
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.body.label",
+                "op": "eq",
+                "expected": "Horror",
+                "pass": true
+              },
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 200,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "label": {
+                          "type": "string"
+                        }
+                      },
+                      "title": "category Input",
+                      "type": "object"
+                    }
+                  ],
+                  "title": "category Output"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "h1q8",
+          "name": "Delete category",
+          "status": "completed",
+          "time": 19,
+          "failCount": 0,
+          "passCount": 2,
+          "ctx": {
+            "id": 95
+          },
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "delete",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories/95"
+          },
+          "output": {
+            "body": null,
+            "headers": {
+              "Connection": "keep-alive",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 204,
+            "time": 16
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 204,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "additionalProperties": false,
+                  "type": "null"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "sjnl",
+          "name": "Get category",
+          "status": "completed",
+          "time": 15,
+          "failCount": 0,
+          "passCount": 2,
+          "ctx": {
+            "id": 95
+          },
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "get",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories/95"
+          },
+          "output": {
+            "body": {
+              "message": "The category #95 doesn't exists",
+              "status": "NOT_FOUND"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 404,
+            "time": 12
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 404,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        }
+      ],
+      "response": {
+        "time": 0,
+        "status": 0,
+        "headers": {},
+        "body": {}
+      }
+    },
+    "h1nh": {
+      "id": "h1nh",
+      "name": "Test Category Errors",
+      "status": "completed",
+      "time": 236,
+      "failCount": 0,
+      "passCount": 21,
+      "ctx": {},
+      "env": {
+        "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+        "bookcasev2-label": "Adventure",
+        "var_de_test": 83
+      },
+      "steps": [
+        {
+          "id": "sybd",
+          "name": "Get category",
+          "status": "completed",
+          "time": 29,
+          "failCount": 0,
+          "passCount": 3,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "get",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories/5642547"
+          },
+          "output": {
+            "body": {
+              "message": "The category #5642547 doesn't exists",
+              "status": "NOT_FOUND"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "HIT from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 404,
+            "time": 16
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 404,
+                "pass": true
+              },
+              {
+                "target": "output.body.status",
+                "op": "eq",
+                "expected": "NOT_FOUND",
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "hyls",
+          "name": "Update category",
+          "status": "completed",
+          "time": 28,
+          "failCount": 0,
+          "passCount": 2,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": {
+              "label": "string"
+            },
+            "headers": {
+              "content-type": "application/json"
+            },
+            "method": "put",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories/5642547"
+          },
+          "output": {
+            "body": {
+              "message": "The category #5642547 doesn't exists",
+              "status": "NOT_FOUND"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 404,
+            "time": 24
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 404,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "r1-r",
+          "name": "Update category",
+          "status": "completed",
+          "time": 28,
+          "failCount": 0,
+          "passCount": 3,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": {
+              "id": 654,
+              "label": "string"
+            },
+            "headers": {
+              "content-type": "application/json"
+            },
+            "method": "put",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories/5642547"
+          },
+          "output": {
+            "body": {
+              "message": "The ids are inconsistant",
+              "status": "BAD_REQUEST"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 400,
+            "time": 22
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 400,
+                "pass": true
+              },
+              {
+                "target": "output.body.status",
+                "op": "eq",
+                "expected": "BAD_REQUEST",
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "b1fb",
+          "name": "Update category",
+          "status": "completed",
+          "time": 27,
+          "failCount": 0,
+          "passCount": 3,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": {
+              "label": "Children"
+            },
+            "headers": {
+              "content-type": "application/json"
+            },
+            "method": "put",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories/2"
+          },
+          "output": {
+            "body": {
+              "message": "The ids 1 to 5 are read-only to ensure that codelabs always work",
+              "status": "FORBIDDEN"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 403,
+            "time": 22
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 403,
+                "pass": true
+              },
+              {
+                "target": "output.body.status",
+                "op": "eq",
+                "expected": "FORBIDDEN",
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "rjqh",
+          "name": "Delete category",
+          "status": "completed",
+          "time": 21,
+          "failCount": 0,
+          "passCount": 2,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "delete",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories/684321"
+          },
+          "output": {
+            "body": {
+              "message": "The category #684321 doesn't exists",
+              "status": "NOT_FOUND"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 404,
+            "time": 16
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 404,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "sjwe",
+          "name": "Delete category",
+          "status": "completed",
+          "time": 22,
+          "failCount": 0,
+          "passCount": 2,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "delete",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories/2"
+          },
+          "output": {
+            "body": {
+              "message": "The ids 1 to 5 are read-only to ensure that codelabs always work",
+              "status": "FORBIDDEN"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 403,
+            "time": 17
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 403,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "rj9z",
+          "name": "Create category",
+          "status": "completed",
+          "time": 34,
+          "failCount": 0,
+          "passCount": 3,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": {
+              "id": 32132,
+              "label": "string (optional)"
+            },
+            "headers": {
+              "content-type": "application/json"
+            },
+            "method": "post",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories"
+          },
+          "output": {
+            "body": {
+              "message": "The id must not be set",
+              "status": "BAD_REQUEST"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 400,
+            "time": 29
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 400,
+                "pass": true
+              },
+              {
+                "target": "output.body.status",
+                "op": "eq",
+                "expected": "BAD_REQUEST",
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "bjoq",
+          "name": "Create category",
+          "status": "completed",
+          "time": 45,
+          "failCount": 0,
+          "passCount": 3,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": {
+              "label": "Drama"
+            },
+            "headers": {
+              "content-type": "application/json"
+            },
+            "method": "post",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/categories"
+          },
+          "output": {
+            "body": {
+              "message": "This category already exists",
+              "status": "CONFLICT"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 409,
+            "time": 36
+          },
+          "logs": [
+            {
+              "type": "info",
+              "msg": "Before : Test de trace en log",
+              "source": "before.script"
+            },
+            {
+              "type": "error",
+              "msg": "Test de trace en erreur",
+              "source": "after.script"
+            }
+          ],
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 409,
+                "pass": true
+              },
+              {
+                "target": "output.body.status",
+                "op": "eq",
+                "expected": "CONFLICT",
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        }
+      ],
+      "response": {
+        "time": 0,
+        "status": 0,
+        "headers": {},
+        "body": {}
+      }
+    },
+    "s148": {
+      "id": "s148",
+      "name": "Test Books",
+      "status": "completed",
+      "time": 191,
+      "failCount": 0,
+      "passCount": 17,
+      "ctx": {},
+      "env": {
+        "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+        "bookcasev2-label": "Adventure",
+        "var_de_test": 83
+      },
+      "steps": [
+        {
+          "id": "s1ue",
+          "name": "List books",
+          "status": "completed",
+          "time": 32,
+          "failCount": 0,
+          "passCount": 4,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "get",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/books"
+          },
+          "output": {
+            "body": [
+              {
+                "author": "Enrik Ibsen",
+                "categories": [
+                  {
+                    "id": 1,
+                    "label": "Drama"
+                  },
+                  {
+                    "id": 3,
+                    "label": "Theater"
+                  }
+                ],
+                "finished": false,
+                "id": 1,
+                "publishedIn": 1867,
+                "title": "Peer Gynt"
+              },
+              {
+                "author": "Molière",
+                "categories": [
+                  {
+                    "id": 3,
+                    "label": "Theater"
+                  }
+                ],
+                "finished": false,
+                "id": 2,
+                "publishedIn": 1671,
+                "title": "Les fourberies de Scapin"
+              },
+              {
+                "author": "Antoon Krings",
+                "categories": [
+                  {
+                    "id": 2,
+                    "label": "Children"
+                  }
+                ],
+                "finished": false,
+                "id": 3,
+                "publishedIn": 1994,
+                "title": "Mireille l'abeille"
+              },
+              {
+                "author": "J.R.R Tolkien",
+                "categories": [
+                  {
+                    "id": 4,
+                    "label": "Heroic Fantasy"
+                  },
+                  {
+                    "id": 5,
+                    "label": "Novel"
+                  }
+                ],
+                "finished": false,
+                "id": 4,
+                "publishedIn": 1954,
+                "title": "The Lord of the Rings"
+              },
+              {
+                "author": "G. Delahaye - M. Marlier",
+                "categories": [
+                  {
+                    "id": 1,
+                    "label": "Drama"
+                  },
+                  {
+                    "id": 2,
+                    "label": "Children"
+                  }
+                ],
+                "finished": false,
+                "id": 5,
+                "publishedIn": 1963,
+                "title": "Martine à la maison"
+              }
+            ],
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 200,
+            "time": 17
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.time",
+                "op": "lt",
+                "expected": 2000,
+                "pass": true
+              },
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 200,
+                "pass": true
+              },
+              {
+                "target": "output.body[0].title",
+                "op": "eq",
+                "expected": "Peer Gynt",
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "items": {
+                    "allOf": [
+                      {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "id"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "example": {
+                          "author": "Enrik Ibsen",
+                          "categories": [
+                            {
+                              "id": 3,
+                              "label": "Theater"
+                            },
+                            {
+                              "id": 1,
+                              "label": "Drama"
+                            }
+                          ],
+                          "finished": false,
+                          "id": 1,
+                          "publishedIn": 1867,
+                          "title": "Peer Gynt"
+                        },
+                        "properties": {
+                          "author": {
+                            "type": "string"
+                          },
+                          "categories": {
+                            "items": {
+                              "allOf": [
+                                {
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    }
+                                  },
+                                  "type": "object"
+                                },
+                                {
+                                  "properties": {
+                                    "label": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "title": "category Input",
+                                  "type": "object"
+                                }
+                              ],
+                              "title": "category Output"
+                            },
+                            "type": [
+                              "array",
+                              "null"
+                            ]
+                          },
+                          "finished": {
+                            "type": "boolean"
+                          },
+                          "publishedIn": {
+                            "maximum": 2100,
+                            "minimum": 1454,
+                            "type": "integer"
+                          },
+                          "title": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "title",
+                          "author",
+                          "publishedIn"
+                        ],
+                        "title": "book Input",
+                        "type": "object"
+                      }
+                    ],
+                    "example": {
+                      "author": "laboris consectetur ullam",
+                      "id": 75791946,
+                      "publishedIn": 61204632
+                    },
+                    "title": "book Output"
+                  },
+                  "type": "array"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "rkeu",
+          "name": "Create book",
+          "status": "completed",
+          "time": 26,
+          "failCount": 0,
+          "passCount": 2,
+          "ctx": {
+            "id": 95
+          },
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": {
+              "author": "Tartempion",
+              "categories": [],
+              "finished": false,
+              "publishedIn": 2017,
+              "title": "Moi, moi, moi !"
+            },
+            "headers": {
+              "content-type": "application/json"
+            },
+            "method": "post",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/books"
+          },
+          "output": {
+            "body": {
+              "author": "Tartempion",
+              "categories": [],
+              "finished": false,
+              "id": 95,
+              "publishedIn": 2017,
+              "title": "Moi, moi, moi !"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Location": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/books/95",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 201,
+            "time": 21
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 201,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "example": {
+                        "author": "Enrik Ibsen",
+                        "categories": [
+                          {
+                            "id": 3,
+                            "label": "Theater"
+                          },
+                          {
+                            "id": 1,
+                            "label": "Drama"
+                          }
+                        ],
+                        "finished": false,
+                        "id": 1,
+                        "publishedIn": 1867,
+                        "title": "Peer Gynt"
+                      },
+                      "properties": {
+                        "author": {
+                          "type": "string"
+                        },
+                        "categories": {
+                          "items": {
+                            "allOf": [
+                              {
+                                "properties": {
+                                  "id": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "label": {
+                                    "type": "string"
+                                  }
+                                },
+                                "title": "category Input",
+                                "type": "object"
+                              }
+                            ],
+                            "title": "category Output"
+                          },
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "finished": {
+                          "type": "boolean"
+                        },
+                        "publishedIn": {
+                          "maximum": 2100,
+                          "minimum": 1454,
+                          "type": "integer"
+                        },
+                        "title": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "title",
+                        "author",
+                        "publishedIn"
+                      ],
+                      "title": "book Input",
+                      "type": "object"
+                    }
+                  ],
+                  "example": {
+                    "author": "laboris consectetur ullam",
+                    "id": 75791946,
+                    "publishedIn": 61204632
+                  },
+                  "title": "book Output"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "b1-u",
+          "name": "Get book",
+          "status": "completed",
+          "time": 28,
+          "failCount": 0,
+          "passCount": 2,
+          "ctx": {
+            "id": 95
+          },
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "get",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/books/95"
+          },
+          "output": {
+            "body": {
+              "author": "Tartempion",
+              "categories": [],
+              "finished": false,
+              "id": 95,
+              "publishedIn": 2017,
+              "title": "Moi, moi, moi !"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 200,
+            "time": 20
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 200,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "example": {
+                        "author": "Enrik Ibsen",
+                        "categories": [
+                          {
+                            "id": 3,
+                            "label": "Theater"
+                          },
+                          {
+                            "id": 1,
+                            "label": "Drama"
+                          }
+                        ],
+                        "finished": false,
+                        "id": 1,
+                        "publishedIn": 1867,
+                        "title": "Peer Gynt"
+                      },
+                      "properties": {
+                        "author": {
+                          "type": "string"
+                        },
+                        "categories": {
+                          "items": {
+                            "allOf": [
+                              {
+                                "properties": {
+                                  "id": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "label": {
+                                    "type": "string"
+                                  }
+                                },
+                                "title": "category Input",
+                                "type": "object"
+                              }
+                            ],
+                            "title": "category Output"
+                          },
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "finished": {
+                          "type": "boolean"
+                        },
+                        "publishedIn": {
+                          "maximum": 2100,
+                          "minimum": 1454,
+                          "type": "integer"
+                        },
+                        "title": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "title",
+                        "author",
+                        "publishedIn"
+                      ],
+                      "title": "book Input",
+                      "type": "object"
+                    }
+                  ],
+                  "example": {
+                    "author": "laboris consectetur ullam",
+                    "id": 75791946,
+                    "publishedIn": 61204632
+                  },
+                  "title": "book Output"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "bjfw",
+          "name": "Update book",
+          "status": "completed",
+          "time": 26,
+          "failCount": 0,
+          "passCount": 3,
+          "ctx": {
+            "id": 95
+          },
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": {
+              "author": "Tartempion",
+              "categories": [
+                {
+                  "id": 1,
+                  "label": "Drama"
+                }
+              ],
+              "finished": true,
+              "publishedIn": 2017,
+              "title": "Moi, moi, moi !"
+            },
+            "headers": {
+              "content-type": "application/json"
+            },
+            "method": "put",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/books/95"
+          },
+          "output": {
+            "body": {
+              "author": "Tartempion",
+              "categories": [
+                {
+                  "id": 1,
+                  "label": "Drama"
+                }
+              ],
+              "finished": true,
+              "id": 95,
+              "publishedIn": 2017,
+              "title": "Moi, moi, moi !"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 200,
+            "time": 21
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.body.finished",
+                "op": "eq",
+                "expected": true,
+                "pass": true
+              },
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 200,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "example": {
+                        "author": "Enrik Ibsen",
+                        "categories": [
+                          {
+                            "id": 3,
+                            "label": "Theater"
+                          },
+                          {
+                            "id": 1,
+                            "label": "Drama"
+                          }
+                        ],
+                        "finished": false,
+                        "id": 1,
+                        "publishedIn": 1867,
+                        "title": "Peer Gynt"
+                      },
+                      "properties": {
+                        "author": {
+                          "type": "string"
+                        },
+                        "categories": {
+                          "items": {
+                            "allOf": [
+                              {
+                                "properties": {
+                                  "id": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "type": "object"
+                              },
+                              {
+                                "properties": {
+                                  "label": {
+                                    "type": "string"
+                                  }
+                                },
+                                "title": "category Input",
+                                "type": "object"
+                              }
+                            ],
+                            "title": "category Output"
+                          },
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "finished": {
+                          "type": "boolean"
+                        },
+                        "publishedIn": {
+                          "maximum": 2100,
+                          "minimum": 1454,
+                          "type": "integer"
+                        },
+                        "title": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "title",
+                        "author",
+                        "publishedIn"
+                      ],
+                      "title": "book Input",
+                      "type": "object"
+                    }
+                  ],
+                  "example": {
+                    "author": "laboris consectetur ullam",
+                    "id": 75791946,
+                    "publishedIn": 61204632
+                  },
+                  "title": "book Output"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "r1fz",
+          "name": "Search book",
+          "status": "completed",
+          "time": 22,
+          "failCount": 0,
+          "passCount": 1,
+          "ctx": {
+            "id": 95
+          },
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "get",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/books?search=tarte"
+          },
+          "output": {
+            "body": [
+              {
+                "author": "Tartempion",
+                "categories": [
+                  {
+                    "id": 1,
+                    "label": "Drama"
+                  }
+                ],
+                "finished": true,
+                "id": 95,
+                "publishedIn": 2017,
+                "title": "Moi, moi, moi !"
+              }
+            ],
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 200,
+            "time": 19
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "items": {
+                    "allOf": [
+                      {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "id"
+                        ],
+                        "type": "object"
+                      },
+                      {
+                        "example": {
+                          "author": "Enrik Ibsen",
+                          "categories": [
+                            {
+                              "id": 3,
+                              "label": "Theater"
+                            },
+                            {
+                              "id": 1,
+                              "label": "Drama"
+                            }
+                          ],
+                          "finished": false,
+                          "id": 1,
+                          "publishedIn": 1867,
+                          "title": "Peer Gynt"
+                        },
+                        "properties": {
+                          "author": {
+                            "type": "string"
+                          },
+                          "categories": {
+                            "items": {
+                              "allOf": [
+                                {
+                                  "properties": {
+                                    "id": {
+                                      "type": "integer"
+                                    }
+                                  },
+                                  "type": "object"
+                                },
+                                {
+                                  "properties": {
+                                    "label": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "title": "category Input",
+                                  "type": "object"
+                                }
+                              ],
+                              "title": "category Output"
+                            },
+                            "type": [
+                              "array",
+                              "null"
+                            ]
+                          },
+                          "finished": {
+                            "type": "boolean"
+                          },
+                          "publishedIn": {
+                            "maximum": 2100,
+                            "minimum": 1454,
+                            "type": "integer"
+                          },
+                          "title": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "title",
+                          "author",
+                          "publishedIn"
+                        ],
+                        "title": "book Input",
+                        "type": "object"
+                      }
+                    ],
+                    "example": {
+                      "author": "laboris consectetur ullam",
+                      "id": 75791946,
+                      "publishedIn": 61204632
+                    },
+                    "title": "book Output"
+                  },
+                  "type": "array"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "hkmi",
+          "name": "Delete book",
+          "status": "completed",
+          "time": 39,
+          "failCount": 0,
+          "passCount": 2,
+          "ctx": {
+            "id": 95
+          },
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "delete",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/books/95"
+          },
+          "output": {
+            "body": null,
+            "headers": {
+              "Connection": "keep-alive",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 204,
+            "time": 35
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 204,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "additionalProperties": false,
+                  "type": "null"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "symu",
+          "name": "Get book",
+          "status": "completed",
+          "time": 17,
+          "failCount": 0,
+          "passCount": 3,
+          "ctx": {
+            "id": 95
+          },
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "get",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/books/95"
+          },
+          "output": {
+            "body": {
+              "message": "The book #95 doesn't exists",
+              "status": "NOT_FOUND"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 404,
+            "time": 11
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 404,
+                "pass": true
+              },
+              {
+                "target": "output.body.status",
+                "op": "eq",
+                "expected": "NOT_FOUND",
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "type": "object"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        }
+      ],
+      "response": {
+        "time": 0,
+        "status": 0,
+        "headers": {},
+        "body": {}
+      }
+    },
+    "sjt-": {
+      "id": "sjt-",
+      "name": "Check Server",
+      "status": "completed",
+      "time": 47,
+      "failCount": 0,
+      "passCount": 4,
+      "ctx": {},
+      "env": {
+        "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+        "bookcasev2-label": "Adventure",
+        "var_de_test": 83
+      },
+      "steps": [
+        {
+          "id": "bjxy",
+          "name": "Check",
+          "status": "completed",
+          "time": 30,
+          "failCount": 0,
+          "passCount": 2,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "get",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/check"
+          },
+          "output": {
+            "body": {
+              "status": "ok",
+              "version": "v2"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Length": "31",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 200,
+            "time": 19
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 200,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        },
+        {
+          "id": "syi2",
+          "name": "Script",
+          "status": "completed",
+          "time": 2,
+          "failCount": 0,
+          "passCount": 0,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "script",
+          "input": {
+            "script": "console.log(\"script !\");"
+          },
+          "output": true,
+          "logs": [
+            {
+              "type": "info",
+              "msg": "script !",
+              "source": "step.script"
+            }
+          ]
+        },
+        {
+          "id": "rks7",
+          "name": "Check COPY",
+          "status": "completed",
+          "time": 14,
+          "failCount": 0,
+          "passCount": 2,
+          "ctx": {},
+          "env": {
+            "bookcasev2-host": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2",
+            "bookcasev2-label": "Adventure",
+            "var_de_test": 83
+          },
+          "type": "http",
+          "input": {
+            "auth": {},
+            "body": null,
+            "headers": {},
+            "method": "get",
+            "url": "http://codelab-latest.satd-r.cloud.arkea.com:8080/v2/check"
+          },
+          "output": {
+            "body": {
+              "status": "ok",
+              "version": "v2"
+            },
+            "headers": {
+              "Connection": "keep-alive",
+              "Content-Length": "31",
+              "Content-Type": "application/json;charset=UTF-8",
+              "Date": "Thu, 15 Jun 2017 14:48:01 GMT",
+              "Via": "1.0 10.154.30.105 (squid/3.1.11), 1.1 e7a033e798d2 (squid/3.3.8)",
+              "X-Cache": "MISS from proxy-lb.gicm.net, MISS from e7a033e798d2",
+              "X-Cache-Lookup": "MISS from proxy-lb.gicm.net:3128, MISS from e7a033e798d2:3128"
+            },
+            "status": 200,
+            "time": 12
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 200,
+                "pass": true
+              },
+              {
+                "target": "output.body",
+                "op": "validate.contract",
+                "expected": {
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "pass": true,
+                "details": "The document is valid!"
+              }
+            ]
+          }
+        }
+      ],
+      "response": {
+        "time": 0,
+        "status": 0,
+        "headers": {},
+        "body": {}
+      }
+    }
+  },
+  "response": {
+    "time": 0,
+    "status": 0,
+    "headers": {},
+    "body": {}
+  }
+}

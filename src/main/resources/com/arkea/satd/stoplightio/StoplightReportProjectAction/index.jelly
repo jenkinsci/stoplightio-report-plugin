@@ -1,0 +1,126 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:i="jelly:fmt" >
+    <l:layout>
+        <st:include it="${it.project}" page="sidepanel.jelly"/>
+		<j:set var="projectCollections" value="${it.getProjectCollections()}"/>
+
+
+        <l:main-panel>
+
+			<style>
+				table.report {
+				    border: 1px solid black;
+				    border-collapse: collapse;
+				    width: 70%;
+				}
+				
+				table.report th, table.report td {
+				    border: 1px solid black;
+				    text-align: center;
+				    padding: 8px;
+				}
+				
+				table.report tr:nth-child(even) {background-color: #f2f2f2}
+				
+				.passed {
+					background-color: lightgreen;
+				}
+				
+				.failed {
+					background-color: lightcoral;
+				}
+				
+				.notest {
+					background-color: yellow;
+				}
+				
+			</style>
+
+
+            <h1>${it.displayName}</h1>
+
+			<table class="report">
+				<tr>
+					<th>Build id#</th>
+					<th>Build date</th>
+					<th class="notest">No Test</th>
+					<th class="failed">Failed</th>
+					<th class="passed">Passed</th>
+					<th>TOTAL</th>
+					<th></th>
+				</tr>		            
+				<j:forEach var="buildAction" items="${projectCollections}">
+					<tr>
+						<td>${buildAction.buildNumber}</td>
+						<td><i:formatDate pattern = "dd-MMM-yyyy HH:mm:ss" value="${buildAction.buildDate}" /></td>
+						<td>${buildAction.noAssertionCount}</td>
+						<td>${buildAction.failedAssertionsCount}</td>
+						<td>${buildAction.succeededAssertionsCount}</td>
+						<td>${buildAction.assertionsCount}</td>
+							
+						<j:set var="cellClass" value="failed"/>	
+			            <j:if test="${buildAction.success == true}">
+			          	  <j:set var="cellClass" value="passed"/>
+			          	</j:if>
+						<td class="${cellClass}"><a href="../${buildAction.buildNumber}/${buildAction.urlName}">Details...</a></td>
+					</tr>
+	            </j:forEach>		            
+			</table>
+			
+			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+			<div id="chart_div" style="width: 100%; height: 500px;"></div>			
+			
+			<script type="text/javascript">
+			    google.charts.load('current', {'packages':['corechart']});
+				google.charts.setOnLoadCallback(drawChart);
+
+				function drawChart() {                                                                
+				                                                                                      
+				  function selectHandler() {                                                          
+				    var selectedItem = chart.getSelection()[0];                                       
+				    if (selectedItem) {                                                               
+				      var topping = data.getValue(selectedItem.row, 0);
+				      if(topping!='') {                               
+				      	window.location.href = "../"+topping.substring(1)+"/${buildAction.urlName}";
+				      }
+				    }                                                                                 
+				  }                                                                                   
+
+				  var options = {                                                                     
+				    title: 'Scenarios Assertions Trend',
+				    reverseCategories : true,                                              
+				    areaOpacity: 0.8,
+				    colors: ['yellow', 'red', 'lightgreen'],
+				    isStacked: true,                                                                                                                                               
+				    hAxis: {title: 'Build'},                                                          
+				    vAxis: {                                                                          
+				      minValue: 0,   
+				      gridlines: {color : "#000"}
+				    }                                                                                 
+				  };                                                                                  
+				                                                                                      
+				  var data = new google.visualization.DataTable();                                    
+				  data.addColumn('string', 'Build');                                                  
+				  data.addColumn('number', 'No Test');                                                  
+				  data.addColumn('number', 'Failed');                                                 
+				  data.addColumn('number', 'Success');   
+				                                                                                      
+				  var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+				  google.visualization.events.addListener(chart, 'select', selectHandler);
+
+				  <j:forEach var="buildAction" items="${projectCollections}">
+		          		 data.addRow(['#${buildAction.buildNumber}', ${buildAction.noAssertionCount}, ${buildAction.failedAssertionsCount}, ${buildAction.succeededAssertionsCount}]);
+		          </j:forEach>
+		          
+				  <j:if test="${projectCollections.size() == 1}">
+		          		 data.addRow(['', 0, 0, 0]);
+		          </j:if>
+
+          		  chart.draw(data, options);
+		           
+			    }				
+			</script>
+
+        </l:main-panel>
+    </l:layout>
+</j:jelly>
