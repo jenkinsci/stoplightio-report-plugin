@@ -25,7 +25,7 @@
 
   <name>Stoplight Plugin</name>
   <description>Stoplight Report plugin, used as post-build action.</description>
-  <url>https://wiki.jenkins.io/display/JENKINS/Stoplight+Report+Plugin</url>
+  <url>https://wiki.jenkins.io/display/JENKINS/StoplightIO+Report+Plugin</url>
 
   <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
 
