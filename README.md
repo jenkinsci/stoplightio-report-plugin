@@ -12,8 +12,7 @@ This Jenkins plugin is used as "Post Built Action".
 
 ## Installation
 
-The stoplightio-report.hpi is available in "target" directory.
-
+The plugin can be install with the differents methods described in the Jenkins documentation : https://wiki.jenkins.io/display/JENKINS/Plugins#Plugins-Howtoinstallplugins
 
 
 # Features

@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 
+import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
@@ -136,7 +137,7 @@ public class StoplightReportPublisher extends Recorder {
      * See {@code src/main/resources/com/arkea/satd/stoplightio/StoplightReportPublisher/*.jelly}
      * for the actual HTML fragment for the configuration screen.
      */
-    @Extension // This indicates to Jenkins that this is an implementation of an extension point.
+    @Extension @Symbol("stoplightio-report") // This indicates to Jenkins that this is an implementation of an extension point.
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
         /**
