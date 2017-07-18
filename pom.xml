@@ -36,15 +36,15 @@
     </license>
   </licenses>
 
-  <!-- If you want this to appear on the wiki page:  -->
+  <!-- If you want this to appear on the wiki page:
   <developers>
     <developer>
       <id>ntiss</id>
       <name>Nicolas Tisserand</name>
-      <email>nicolas.tisserand@arkea.com</email>
+      <email></email>
     </developer>
   </developers>
-
+  -->
   <!-- Assuming you want to host on @jenkinsci: -->
   <scm>
     <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
