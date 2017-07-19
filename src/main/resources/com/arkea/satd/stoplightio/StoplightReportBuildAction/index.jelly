@@ -25,13 +25,13 @@
 				table.report tr:nth-child(even) {background-color: #f2f2f2}
 				
 				li.notest {
-				   list-style-image : url("${resURL}/plugin/stoplightio/img/warning.png");
+				   list-style-image : url("${resURL}/plugin/stoplightio-report/img/warning.png");
 				} 
 				li.failed {
-				   list-style-image : url("${resURL}/plugin/stoplightio/img/failure.png");
+				   list-style-image : url("${resURL}/plugin/stoplightio-report/img/failure.png");
 				} 
 				li.passed {
-				   list-style-image : url("${resURL}/plugin/stoplightio/img/success.png");
+				   list-style-image : url("${resURL}/plugin/stoplightio-report/img/success.png");
 				} 
 				
 			</style>

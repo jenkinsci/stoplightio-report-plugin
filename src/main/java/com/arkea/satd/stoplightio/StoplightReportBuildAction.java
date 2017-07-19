@@ -34,7 +34,7 @@ public class StoplightReportBuildAction implements Action {
 
 	@Override
 	public String getIconFileName() {
-		return "/plugin/stoplightio/img/scenarios.png";
+		return "/plugin/stoplightio-report/img/scenarios.png";
 	}
 
 	@Override
