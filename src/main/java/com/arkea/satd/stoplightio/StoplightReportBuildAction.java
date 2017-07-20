@@ -7,6 +7,7 @@ import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.model.Scenario;
 import com.arkea.satd.stoplightio.model.Step;
 
+import hudson.model.Run;
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import hudson.model.Result;
@@ -19,10 +20,10 @@ import hudson.model.Result;
 
 public class StoplightReportBuildAction implements Action {
 
-	private AbstractBuild<?, ?> build;
+	private Run<?, ?> build;
 	private Collection collection;
 	
-	public StoplightReportBuildAction(final AbstractBuild<?, ?> build, Collection collection) {
+	public StoplightReportBuildAction(final Run<?, ?> build, Collection collection) {
 		this.build = build;
 		this.collection = collection;
 	}
@@ -50,7 +51,7 @@ public class StoplightReportBuildAction implements Action {
         return this.build.getTime();
 	}	
 	
-	public AbstractBuild<?, ?> getBuild() {
+	public Run<?, ?> getBuild() {
         return build;
 	}	
 	
