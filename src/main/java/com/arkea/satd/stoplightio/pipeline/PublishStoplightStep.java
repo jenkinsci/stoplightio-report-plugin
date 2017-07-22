@@ -1,14 +1,14 @@
 package com.arkea.satd.stoplightio.pipeline;
 
-import hudson.Extension;
-import hudson.util.FormValidation;
+import javax.annotation.CheckForNull;
 
 import org.jenkinsci.plugins.workflow.steps.AbstractStepDescriptorImpl;
 import org.jenkinsci.plugins.workflow.steps.AbstractStepImpl;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
-import javax.annotation.CheckForNull;
+import hudson.Extension;
+import hudson.util.FormValidation;
 
 /**
  * @author Nicolas TISSERAND
@@ -38,7 +38,7 @@ public class PublishStoplightStep extends AbstractStepImpl {
         public DescriptorImpl() {
             super(PublishStoplightStepExecution.class);
         }
-
+        
         /**
          * Performs on-the-fly validation of the form field 'name'.
          *

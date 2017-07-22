@@ -1,9 +1,7 @@
 package com.arkea.satd.stoplightio;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 
-import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
@@ -16,7 +14,6 @@ import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import hudson.model.Action;
 import hudson.model.BuildListener;
 import hudson.model.Run;
 import hudson.model.TaskListener;
@@ -61,7 +58,7 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
 	public BuildStepMonitor getRequiredMonitorService() {
         return BuildStepMonitor.NONE;
     }
-
+	
 	/**
      * Used in {@code config.jelly}.
      * @return The path of the file to parse
@@ -95,12 +92,12 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
 
 	@Override
 	public void perform(Run<?, ?> run, FilePath filePath, Launcher launcher, TaskListener taskListener) throws InterruptedException, IOException {
-    	// for implement SimpleBuildStep		
+    	// for implements SimpleBuildStep		
 		perform(run, taskListener);
 	}
 
 	/**
-	 * 
+	 * Common method to process the build result file
 	 * @param build
 	 * @param taskListener
 	 * @return

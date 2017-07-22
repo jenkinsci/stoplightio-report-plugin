@@ -23,15 +23,10 @@ public class StoplightReportBuildAction implements Action, SimpleBuildStep.LastB
 
 	private Run<?, ?> build;
 	private Collection collection;
-	private final List<StoplightReportProjectAction> projectActions;
 	
 	public StoplightReportBuildAction(final Run<?, ?> build, Collection collection) {
 		this.build = build;
 		this.collection = collection;
-		
-		List<StoplightReportProjectAction> projectActions = new ArrayList<>();
-        projectActions.add(new StoplightReportProjectAction(build.getParent()));
-        this.projectActions = projectActions;
 	}
 
 	@Override
@@ -153,6 +148,8 @@ public class StoplightReportBuildAction implements Action, SimpleBuildStep.LastB
 
 	@Override
 	public java.util.Collection<? extends Action> getProjectActions() {
+		List<StoplightReportProjectAction> projectActions = new ArrayList<>();
+        projectActions.add(new StoplightReportProjectAction(build.getParent()));
 		return projectActions;
 	}
 		
