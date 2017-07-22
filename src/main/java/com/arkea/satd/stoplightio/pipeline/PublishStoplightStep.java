@@ -19,6 +19,13 @@ public class PublishStoplightStep extends AbstractStepImpl {
     private final String resultFile;
 
     @DataBoundConstructor
+    public PublishStoplightStep(@CheckForNull String consoleOrFile) {
+        this.consoleOrFile = consoleOrFile;
+        this.resultFile = "";
+    }
+    
+    
+    @DataBoundConstructor
     public PublishStoplightStep(@CheckForNull String consoleOrFile, @CheckForNull String resultFile) {
         this.consoleOrFile = consoleOrFile;
         this.resultFile = resultFile;
