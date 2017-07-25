@@ -115,8 +115,13 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
 				if(taskListener!=null) taskListener.getLogger().println("The environment variable WORKSPACE doesn't exists");
 				e.printStackTrace();
 			}
-        	
-        	String prepareFileLocation = resultFile.replace("${WORKSPACE}", wsBasePath).replace("%WORKSPACE%", wsBasePath);
+
+			if(wsBasePath==null) {
+				wsBasePath = "";
+			}
+        	String prepareFileLocation = resultFile
+        			.replace("${WORKSPACE}", wsBasePath)
+        			.replace("%WORKSPACE%", wsBasePath);
         	f = new File(prepareFileLocation);    		
     	}
 
