@@ -5,6 +5,7 @@ import javax.annotation.CheckForNull;
 import org.jenkinsci.plugins.workflow.steps.AbstractStepDescriptorImpl;
 import org.jenkinsci.plugins.workflow.steps.AbstractStepImpl;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
 import hudson.Extension;
@@ -16,21 +17,19 @@ import hudson.util.FormValidation;
 public class PublishStoplightStep extends AbstractStepImpl {
 
     private final String consoleOrFile;
-    private final String resultFile;
-
+    private String resultFile = "";
+    
     @DataBoundConstructor
     public PublishStoplightStep(@CheckForNull String consoleOrFile) {
         this.consoleOrFile = consoleOrFile;
-        this.resultFile = "";
-    }
-    
-    
-    @DataBoundConstructor
-    public PublishStoplightStep(@CheckForNull String consoleOrFile, @CheckForNull String resultFile) {
-        this.consoleOrFile = consoleOrFile;
-        this.resultFile = resultFile;
     }
 
+    @DataBoundSetter
+    public void setResultFile(String resultFile) {
+        this.resultFile = resultFile==null?"":resultFile;
+    }
+    
+    
     public String getResultFile() {
         return resultFile;
     }
