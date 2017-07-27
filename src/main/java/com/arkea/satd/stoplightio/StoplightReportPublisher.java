@@ -1,9 +1,7 @@
 package com.arkea.satd.stoplightio;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 
-import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
@@ -12,16 +10,19 @@ import com.arkea.satd.stoplightio.parsers.ConsoleParser;
 import com.arkea.satd.stoplightio.parsers.JsonResultParser;
 
 import hudson.Extension;
+import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import hudson.model.Action;
 import hudson.model.BuildListener;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import hudson.util.FormValidation;
+import jenkins.tasks.SimpleBuildStep;
 
 /**
  * Publisher Plugin for Stoplight / Scenario / Prism 
@@ -30,7 +31,7 @@ import hudson.util.FormValidation;
  *
  * @author Nicolas TISSERAND
  */
-public class StoplightReportPublisher extends Recorder {
+public class StoplightReportPublisher extends Recorder implements SimpleBuildStep {
 
 	////config.jelly fields
 	//Radio Button Selection
@@ -46,19 +47,21 @@ public class StoplightReportPublisher extends Recorder {
         this.resultFile = resultFile;
     }
 
-    public BuildStepMonitor getRequiredMonitorService() {
+    public String getConsoleOrFile() {
+		return consoleOrFile;
+	}
+
+	public static String getConsole() {
+		return CONSOLE;
+	}
+
+	public BuildStepMonitor getRequiredMonitorService() {
         return BuildStepMonitor.NONE;
     }
-
-   
-    @Override public java.util.Collection<? extends Action> getProjectActions(AbstractProject<?, ?> project) {
-        return Collections.singleton(new StoplightReportProjectAction(project));
-    }
-        
-    /**
+	
+	/**
      * Used in {@code config.jelly}.
-     * Returns the path of the file to parse
-     * @return the path of the file to parse
+     * @return The path of the file to parse
      */
     public String getResultFile() {
         return resultFile;
@@ -83,25 +86,47 @@ public class StoplightReportPublisher extends Recorder {
     
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) {
+    	// for extends Recorder
+		return perform(build, listener);
+    }
 
+	@Override
+	public void perform(Run<?, ?> run, FilePath filePath, Launcher launcher, TaskListener taskListener) throws InterruptedException, IOException {
+    	// for implements SimpleBuildStep		
+		perform(run, taskListener);
+	}
+
+	/**
+	 * Common method to process the build result file
+	 * @param build
+	 * @param taskListener
+	 * @return
+	 */
+	private boolean perform(Run<?, ?> build, TaskListener taskListener) {
+		
     	File f;
     	if(consoleOrFile==null || consoleOrFile.isEmpty() || CONSOLE.equals(consoleOrFile)) {
     		f = build.getLogFile();
     	} else {
         	String wsBasePath = "";
         	try {
-        		wsBasePath = build.getEnvironment(listener).get("WORKSPACE");
+        		wsBasePath = build.getEnvironment(taskListener).get("WORKSPACE");
 			} catch (IOException | InterruptedException e) {
-				listener.getLogger().println("The environment variable WORKSPACE doesn't exists");
+				if(taskListener!=null) taskListener.getLogger().println("The environment variable WORKSPACE doesn't exists");
 				e.printStackTrace();
 			}
-        	
-        	String prepareFileLocation = resultFile.replace("${WORKSPACE}", wsBasePath).replace("%WORKSPACE%", wsBasePath);
+
+			if(wsBasePath==null) {
+				wsBasePath = "";
+			}
+        	String prepareFileLocation = resultFile
+        			.replace("${WORKSPACE}", wsBasePath)
+        			.replace("%WORKSPACE%", wsBasePath);
         	f = new File(prepareFileLocation);    		
     	}
 
     	if(f.exists()) {
-	   		listener.getLogger().println("Parsing " + f.getAbsolutePath());
+    		if(taskListener!=null) taskListener.getLogger().println("Parsing " + f.getAbsolutePath());
 	   		
 	   		Collection coll;
 	   		try {
@@ -112,15 +137,15 @@ public class StoplightReportPublisher extends Recorder {
 	
 			StoplightReportBuildAction buildAction = new StoplightReportBuildAction(build, coll);
 			build.addAction(buildAction);
-			
-			return true;
+			return true;			
     	} else {
-    		listener.getLogger().println("The file " + resultFile + " doesn't exists");
+    		if(taskListener!=null) taskListener.getLogger().println("The file " + resultFile + " doesn't exists");
     		return false;
     	}
-    	
-    }
-
+	}
+	
+    
+    
     // Overridden for better type safety.
     // If your plugin doesn't really define any property on Descriptor,
     // you don't have to do this.
@@ -137,7 +162,7 @@ public class StoplightReportPublisher extends Recorder {
      * See {@code src/main/resources/com/arkea/satd/stoplightio/StoplightReportPublisher/*.jelly}
      * for the actual HTML fragment for the configuration screen.
      */
-    @Extension @Symbol("stoplightio-report") // This indicates to Jenkins that this is an implementation of an extension point.
+    @Extension //@Symbol("stoplight") // This indicates to Jenkins that this is an implementation of an extension point.
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
         /**
@@ -168,8 +193,10 @@ public class StoplightReportPublisher extends Recorder {
             return FormValidation.ok();
         }
 
+        /**
+         * Indicates that this builder can be used with all kinds of project types
+         */
         public boolean isApplicable(Class<? extends AbstractProject> aClass) {
-            // Indicates that this builder can be used with all kinds of project types 
             return true;
         }
 
@@ -180,7 +207,7 @@ public class StoplightReportPublisher extends Recorder {
             return "Publish Stoplight Report";
         }
 
-
     }
+	
 }
 
