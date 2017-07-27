@@ -41,6 +41,8 @@ This plugin is compliant with new Jenkins Pipeline :
         }
     }        
 
+(Tested with Jenkins 2.60.2)
+
 
 ## Job Main Page : trend 
 
