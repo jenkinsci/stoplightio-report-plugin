@@ -30,12 +30,15 @@ Choose "Jenkins default console" or "File".
 ![](doc/configuration.png)
 
 ## Use in Jenkins Pipeline
-This plugin is compliant with new Jenkins Pipeline :
+This plugin is compliant with new Jenkins Pipeline.
+You can use the Snipper Generator or this fragment :
 
     ...
     ...
     post {
         always {
+        	// Choose one of these options
+
             //publishStoplight consoleOrFile: 'console'
             publishStoplight consoleOrFile: 'file', resultFile: "${env.WORKSPACE}/prism.log"   // Use double-quote to have env variables replacement
         }
