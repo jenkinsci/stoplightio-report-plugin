@@ -19,12 +19,28 @@ The plugin can be install with the differents methods described in the Jenkins d
 
 * Graphical representation based on Google Chart 
 * Integration in Jenkins menus
+* Support of new Jenkins Pipeline
+* Manage Prism Console LOG and JSON format
+
 
 ## Configuration
 The plugin is able to parse either JSON format or standard output of Prism (compliant with prism-2.0.0-alpha.7).
 Choose "Jenkins default console" or "File".
 
 ![](doc/configuration.png)
+
+## Use in Jenkins Pipeline
+This plugin is compliant with new Jenkins Pipeline :
+
+    ...
+    ...
+    post {
+        always {
+            //publishStoplight consoleOrFile: 'console'
+            publishStoplight consoleOrFile: 'file', resultFile: "${env.WORKSPACE}/prism.log"   // Use double-quote to have env variables replacement
+        }
+    }        
+
 
 ## Job Main Page : trend 
 
