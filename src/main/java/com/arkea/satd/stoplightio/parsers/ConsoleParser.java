@@ -63,9 +63,10 @@ public final class ConsoleParser {
 		
 		// File parsing		
 		FileInputStream fis = null;
+		BufferedReader br = null;
 		try {
 			fis = new FileInputStream(consoleFile);
-			final BufferedReader br = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
+			br = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
 		 
 			
 			Scenario currentScenario = null;
@@ -127,6 +128,15 @@ public final class ConsoleParser {
 					e.printStackTrace();
 				}
 			}
+			
+			if(br!=null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
 		}
 		
 		// Global stats
