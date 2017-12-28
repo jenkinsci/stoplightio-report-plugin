@@ -18,10 +18,12 @@ package com.arkea.satd.stoplightio.parsers;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,7 +69,6 @@ public final class ConsoleParser {
 		try {
 			fis = new FileInputStream(consoleFile);
 			br = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
-		 
 			
 			Scenario currentScenario = null;
 			Step currentStep = null;
@@ -116,16 +117,15 @@ public final class ConsoleParser {
 			
 			br.close();		
 		
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger logger = LogManager.getLogManager().getLogger("hudson.WebAppMain");
+			logger.log(Level.SEVERE, "Error while parsing the console default output", e);
 		} finally {
 			if(fis!=null) {
 				try {
 					fis.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					// Nothing to do
 				}
 			}
 			
@@ -133,7 +133,7 @@ public final class ConsoleParser {
 				try {
 					br.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					// Nothing to do
 				}
 			}
 			

@@ -23,10 +23,10 @@ import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.model.Scenario;
 import com.arkea.satd.stoplightio.model.Step;
 
-import hudson.model.Run;
-import jenkins.tasks.SimpleBuildStep;
 import hudson.model.Action;
 import hudson.model.Result;
+import hudson.model.Run;
+import jenkins.tasks.SimpleBuildStep;
 
 /**
  * Class for Build Page
@@ -92,11 +92,7 @@ public class StoplightReportBuildAction implements Action, SimpleBuildStep.LastB
 	}
 
 	public boolean getIsSuccess() {
-		Result r = build.getResult();
-		if(r!=null) {
-			return r==Result.SUCCESS;
-		}
-		return false;
+		return isSuccess();
 	}
 	
 	/**

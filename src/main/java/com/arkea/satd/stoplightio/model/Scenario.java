@@ -27,7 +27,7 @@ public class Scenario {
 
 	private String label;
 	private String duration;
-	private List<Step> steps = new ArrayList<Step>();
+	private List<Step> steps = new ArrayList<>();
 
 	public String getLabel() {
 		return label;

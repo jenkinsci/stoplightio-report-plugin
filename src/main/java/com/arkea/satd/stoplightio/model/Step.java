@@ -29,7 +29,7 @@ public class Step {
 	private String verb;
 	private String url;
 	private String duration;
-	private List<Assertion> assertions = new ArrayList<Assertion>();
+	private List<Assertion> assertions = new ArrayList<>();
 
 	public String getLabel() {
 		return label;

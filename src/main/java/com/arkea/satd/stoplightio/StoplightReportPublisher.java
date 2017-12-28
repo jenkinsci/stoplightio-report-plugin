@@ -16,6 +16,9 @@
 package com.arkea.satd.stoplightio;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
@@ -49,7 +52,6 @@ import jenkins.tasks.SimpleBuildStep;
 public class StoplightReportPublisher extends Recorder implements SimpleBuildStep {
 
 	////config.jelly fields
-	//Radio Button Selection
 	private final String consoleOrFile;
 	private final String resultFile;
 	
@@ -127,8 +129,11 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
         	try {
         		wsBasePath = build.getEnvironment(taskListener).get("WORKSPACE");
 			} catch (IOException | InterruptedException e) {
-				if(taskListener!=null) taskListener.getLogger().println("The environment variable WORKSPACE doesn't exists");
-				e.printStackTrace();
+				if(taskListener!=null) {
+					taskListener.getLogger().println("The environment variable WORKSPACE doesn't exists");
+				}
+				Logger log = LogManager.getLogManager().getLogger("hudson.WebAppMain");
+				log.log(Level.SEVERE, "The environment variable WORKSPACE doesn't exists", e);
 			}
 
 			if(wsBasePath==null) {
