@@ -16,10 +16,14 @@
 package com.arkea.satd.stoplightio;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import hudson.FilePath;
+import hudson.remoting.VirtualChannel;
+import org.jenkinsci.remoting.RoleChecker;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
@@ -28,7 +32,7 @@ import com.arkea.satd.stoplightio.parsers.ConsoleParser;
 import com.arkea.satd.stoplightio.parsers.JsonResultParser;
 
 import hudson.Extension;
-import hudson.FilePath;
+import hudson.FilePath.*;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
@@ -104,26 +108,25 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) {
     	// for extends Recorder
-		return perform(build, listener);
+		return perform(build, listener, build.getWorkspace());
     }
 
 	@Override
-	public void perform(Run<?, ?> run, FilePath filePath, Launcher launcher, TaskListener taskListener) throws InterruptedException, IOException {
+	public void perform(Run<?, ?> run, FilePath workspace, Launcher launcher, TaskListener taskListener) throws InterruptedException, IOException {
     	// for implements SimpleBuildStep		
-		perform(run, taskListener);
+		perform(run, taskListener, workspace);
 	}
 
 	/**
 	 * Common method to process the build result file
 	 * @param build
 	 * @param taskListener
-	 * @return
 	 */
-	private boolean perform(Run<?, ?> build, TaskListener taskListener) {
+	private boolean perform(final Run<?, ?> build, final TaskListener taskListener, FilePath ws) {
 		
-    	File f;
+    	final FilePath f;
     	if(consoleOrFile==null || consoleOrFile.isEmpty() || CONSOLE.equals(consoleOrFile)) {
-    		f = build.getLogFile();
+    		f = new FilePath(build.getLogFile());
     	} else {
         	String wsBasePath = "";
         	try {
@@ -142,29 +145,31 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
         	String prepareFileLocation = resultFile
         			.replace("${WORKSPACE}", wsBasePath)
         			.replace("%WORKSPACE%", wsBasePath);
-        	f = new File(prepareFileLocation);    		
+        	f = new FilePath(ws,prepareFileLocation);
     	}
 
-    	if(f.exists()) {
-    		if(taskListener!=null) taskListener.getLogger().println("Parsing " + f.getAbsolutePath());
-	   		
-	   		Collection coll;
-	   		try {
-	   			coll = JsonResultParser.parse(f);
-	   		} catch(Exception e) {
-	   			coll = ConsoleParser.parse(f);	   			
-	   		}
-	
-			StoplightReportBuildAction buildAction = new StoplightReportBuildAction(build, coll);
-			build.addAction(buildAction);
-			return true;			
-    	} else {
-    		if(taskListener!=null) taskListener.getLogger().println("The file " + resultFile + " doesn't exists");
-    		return false;
-    	}
+		try {
+			if(f.exists()){
+				if(taskListener!=null) taskListener.getLogger().println("Parsing " + f.toURI());
+
+				Collection coll;
+				try {
+					coll = JsonResultParser.parse(f.read());
+				} catch(Exception e) {
+					coll = ConsoleParser.parse(f.read());
+				}
+
+				StoplightReportBuildAction buildAction = new StoplightReportBuildAction(build, coll);
+				build.addAction(buildAction);
+				return true;
+			}
+			if(taskListener!=null) taskListener.getLogger().println("The file " + f.toURI() + " doesn't exists");
+			return false;
+		} catch (IOException | InterruptedException e) {
+			if(taskListener!=null) taskListener.getLogger().println(e);
+			return false;
+		}
 	}
-	
-    
     
     // Overridden for better type safety.
     // If your plugin doesn't really define any property on Descriptor,

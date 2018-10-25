@@ -16,11 +16,13 @@
 package com.arkea.satd.stoplightio;
 
 import java.io.File;
+import java.io.IOException;
 
 import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.parsers.ConsoleParser;
 
 import junit.framework.TestCase;
+import org.apache.commons.io.FileUtils;
 
 /**
  * Simple Test for Console Parser
@@ -32,9 +34,14 @@ public class TestConsoleLogParser extends TestCase{
 	public void test() {
 
 		String fileLocation = "prism_console.log";
-		
-		Collection coll = ConsoleParser.parse(new File(fileLocation));
-		
+
+		Collection coll = null;
+		try {
+			coll = ConsoleParser.parse(FileUtils.openInputStream(new File(fileLocation)));
+		} catch (IOException e) {
+			fail();
+		}
+
 		assertNotNull(coll);
 
 		System.out.println(coll.getSucceededTests() + " test(s) passed on " + coll.getTotalTests() );
