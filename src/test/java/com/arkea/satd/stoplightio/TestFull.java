@@ -15,36 +15,37 @@
  */
 package com.arkea.satd.stoplightio;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.parsers.ConsoleParser;
 import com.arkea.satd.stoplightio.parsers.JsonResultParser;
-
 import junit.framework.TestCase;
-import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class TestFull extends TestCase {
 
 	public void test() {
 
 		String fileLocation = "prism_console.log";
-		
-   		Collection coll = null;
+		Collection coll = null;
+		File testFile = new File(fileLocation);
+		InputStream testStream = null;
 		try {
-   			coll = JsonResultParser.parse(FileUtils.openInputStream(new File(fileLocation)));
-   		} catch(Exception e) {
-   			
-   			assertNull(coll);
-   			System.out.println("JsonResultParser failed, using ConsoleParser");
+			testStream = new FileInputStream(testFile);
 			try {
-				coll = ConsoleParser.parse(FileUtils.openInputStream(new File(fileLocation)));
-			} catch (IOException e1) {
-				fail();
+				coll = JsonResultParser.parse(testStream);
+			} catch(Exception e) {
+				assertNull(coll);
+				System.out.println("JsonResultParser failed, using ConsoleParser");
+				coll = ConsoleParser.parse(testStream);
 			}
+		} catch (FileNotFoundException e) {
+			fail();
 		}
+
    		
 		assertNotNull(coll);
 

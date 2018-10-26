@@ -16,6 +16,7 @@
 package com.arkea.satd.stoplightio.parsers;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import com.arkea.satd.stoplightio.model.Assertion;
 import com.arkea.satd.stoplightio.model.Collection;
@@ -40,10 +41,9 @@ public final class JsonResultParser {
 	 * Parser for Prism JSON output
 	 * @param resultFile File to be parsed
 	 * @return a Collection object filled with the results
-	 * @throws FileNotFoundException throwed if resultFile is not found
 	 * @throws UnsupportedEncodingException throwed if resultFile is not JSON compliant
 	 */
-	public static Collection parse(final InputStream resultFile) throws FileNotFoundException, UnsupportedEncodingException {
+	public static Collection parse(final InputStream resultFile) throws UnsupportedEncodingException {
 		
 		// Result initialization
 		final Collection collection = new Collection();
@@ -52,7 +52,7 @@ public final class JsonResultParser {
 		int succeededTests = 0;
 
 
-		final BufferedReader br = new BufferedReader(new InputStreamReader(resultFile, "UTF-8"));
+		final BufferedReader br = new BufferedReader(new InputStreamReader(resultFile, StandardCharsets.UTF_8));
 		final JsonObject jsonObj = new JsonParser().parse(br).getAsJsonObject();
 		
 		// Iterate on section level : 
@@ -107,7 +107,7 @@ public final class JsonResultParser {
 								final JsonElement pass = assertion.get("pass");
 								
 								final Assertion assrt = new Assertion();
-								assrt.setSuccess(pass!=null?pass.getAsBoolean():false);
+								assrt.setSuccess(pass != null && pass.getAsBoolean());
 								assrt.setMessage( target.getAsString() + " (" + assertion.get("op").getAsString() + ") " + (assertion.get("expected").isJsonObject() ? "against JSON Schema" : assertion.get("expected").getAsString()) );					
 								currentStep.getAssertions().add(assrt);
 								

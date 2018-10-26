@@ -14,37 +14,27 @@
  * limitations under the License.
  */
 package com.arkea.satd.stoplightio;
-import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-
-import hudson.FilePath;
-import hudson.remoting.VirtualChannel;
-import org.jenkinsci.remoting.RoleChecker;
-import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
-
 import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.parsers.ConsoleParser;
 import com.arkea.satd.stoplightio.parsers.JsonResultParser;
-
 import hudson.Extension;
-import hudson.FilePath.*;
+import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.BuildListener;
-import hudson.model.Run;
-import hudson.model.TaskListener;
+import hudson.model.*;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import hudson.util.FormValidation;
 import jenkins.tasks.SimpleBuildStep;
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.QueryParameter;
+
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * Publisher Plugin for Stoplight / Scenario / Prism 
@@ -112,15 +102,15 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
     }
 
 	@Override
-	public void perform(Run<?, ?> run, FilePath workspace, Launcher launcher, TaskListener taskListener) throws InterruptedException, IOException {
+	public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener taskListener) {
     	// for implements SimpleBuildStep		
 		perform(run, taskListener, workspace);
 	}
 
 	/**
 	 * Common method to process the build result file
-	 * @param build
-	 * @param taskListener
+	 * @param build Current build
+	 * @param taskListener Used to print in the console output
 	 */
 	private boolean perform(final Run<?, ?> build, final TaskListener taskListener, FilePath ws) {
 		
@@ -132,9 +122,7 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
         	try {
         		wsBasePath = build.getEnvironment(taskListener).get("WORKSPACE");
 			} catch (IOException | InterruptedException e) {
-				if(taskListener!=null) {
-					taskListener.getLogger().println("The environment variable WORKSPACE doesn't exists");
-				}
+				taskListener.getLogger().println("The environment variable WORKSPACE doesn't exists");
 				Logger log = LogManager.getLogManager().getLogger("hudson.WebAppMain");
 				log.log(Level.SEVERE, "The environment variable WORKSPACE doesn't exists", e);
 			}

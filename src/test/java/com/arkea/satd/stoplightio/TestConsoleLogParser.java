@@ -15,14 +15,14 @@
  */
 package com.arkea.satd.stoplightio;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.parsers.ConsoleParser;
-
 import junit.framework.TestCase;
-import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Simple Test for Console Parser
@@ -37,7 +37,9 @@ public class TestConsoleLogParser extends TestCase{
 
 		Collection coll = null;
 		try {
-			coll = ConsoleParser.parse(FileUtils.openInputStream(new File(fileLocation)));
+			File testFile = new File(fileLocation);
+			InputStream testStream = new FileInputStream(testFile);
+			coll = ConsoleParser.parse(testStream);
 		} catch (IOException e) {
 			fail();
 		}
