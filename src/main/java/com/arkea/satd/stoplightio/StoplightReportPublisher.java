@@ -31,6 +31,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
 import javax.annotation.Nonnull;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -102,7 +103,7 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
     }
 
 	@Override
-	public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener taskListener) {
+	public void perform(Run<?, ?> run, FilePath workspace, Launcher launcher, TaskListener taskListener) {
     	// for implements SimpleBuildStep		
 		perform(run, taskListener, workspace);
 	}
@@ -137,25 +138,28 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
     	}
 
 		try {
-			if(f.exists()){
-				if(taskListener!=null) taskListener.getLogger().println("Parsing " + f.toURI());
-
-				Collection coll;
-				try {
-					coll = JsonResultParser.parse(f.read());
-				} catch(Exception e) {
-					coll = ConsoleParser.parse(f.read());
-				}
-
-				StoplightReportBuildAction buildAction = new StoplightReportBuildAction(build, coll);
-				build.addAction(buildAction);
-				return true;
+			if(!f.exists()) {
+                throw new FileNotFoundException();
 			}
-			if(taskListener!=null) taskListener.getLogger().println("The file " + f.toURI() + " doesn't exists");
-			return false;
+            if(taskListener!=null){
+                taskListener.getLogger().println("Parsing " + f.toURI());
+            }
+
+            Collection coll;
+            try {
+                coll = JsonResultParser.parse(f.read());
+            } catch(Exception e) {
+                coll = ConsoleParser.parse(f.read());
+            }
+
+            StoplightReportBuildAction buildAction = new StoplightReportBuildAction(build, coll);
+            build.addAction(buildAction);
+            return true;
 		} catch (IOException | InterruptedException e) {
-			if(taskListener!=null) taskListener.getLogger().println(e);
-			return false;
+            if(taskListener!=null){
+                taskListener.getLogger().println("The file " + f.getName() + " doesn't exists");
+            }
+            return false;
 		}
 	}
     

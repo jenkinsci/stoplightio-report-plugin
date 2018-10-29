@@ -18,12 +18,10 @@ package com.arkea.satd.stoplightio;
 import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.parsers.ConsoleParser;
 import com.arkea.satd.stoplightio.parsers.JsonResultParser;
+import hudson.FilePath;
 import junit.framework.TestCase;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 
 public class TestFull extends TestCase {
 
@@ -32,19 +30,19 @@ public class TestFull extends TestCase {
 		String fileLocation = "prism_console.log";
 		Collection coll = null;
 		File testFile = new File(fileLocation);
-		InputStream testStream = null;
+		FilePath fp = new FilePath(testFile);
 		try {
-			testStream = new FileInputStream(testFile);
+			coll = JsonResultParser.parse(fp.read());
+		} catch(Exception e) {
+			assertNull(coll);
+			System.out.println("JsonResultParser failed, using ConsoleParser");
 			try {
-				coll = JsonResultParser.parse(testStream);
-			} catch(Exception e) {
-				assertNull(coll);
-				System.out.println("JsonResultParser failed, using ConsoleParser");
-				coll = ConsoleParser.parse(testStream);
+				coll = ConsoleParser.parse(fp.read());
+			} catch (IOException | InterruptedException e1) {
+				fail();
 			}
-		} catch (FileNotFoundException e) {
-			fail();
 		}
+
 
    		
 		assertNotNull(coll);

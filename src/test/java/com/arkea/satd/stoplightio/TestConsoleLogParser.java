@@ -17,12 +17,11 @@ package com.arkea.satd.stoplightio;
 
 import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.parsers.ConsoleParser;
+import hudson.FilePath;
 import junit.framework.TestCase;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Simple Test for Console Parser
@@ -38,9 +37,9 @@ public class TestConsoleLogParser extends TestCase{
 		Collection coll = null;
 		try {
 			File testFile = new File(fileLocation);
-			InputStream testStream = new FileInputStream(testFile);
-			coll = ConsoleParser.parse(testStream);
-		} catch (IOException e) {
+			FilePath fp = new FilePath(testFile);
+			coll = ConsoleParser.parse(fp.read());
+		} catch (IOException | InterruptedException e) {
 			fail();
 		}
 
