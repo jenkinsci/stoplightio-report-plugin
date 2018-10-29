@@ -14,33 +14,28 @@
  * limitations under the License.
  */
 package com.arkea.satd.stoplightio;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-
-import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
-
 import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.parsers.ConsoleParser;
 import com.arkea.satd.stoplightio.parsers.JsonResultParser;
-
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.BuildListener;
-import hudson.model.Run;
-import hudson.model.TaskListener;
+import hudson.model.*;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import hudson.util.FormValidation;
 import jenkins.tasks.SimpleBuildStep;
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.QueryParameter;
+
+import javax.annotation.Nonnull;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * Publisher Plugin for Stoplight / Scenario / Prism 
@@ -104,34 +99,31 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) {
     	// for extends Recorder
-		return perform(build, listener);
+		return perform(build, listener, build.getWorkspace());
     }
 
 	@Override
-	public void perform(Run<?, ?> run, FilePath filePath, Launcher launcher, TaskListener taskListener) throws InterruptedException, IOException {
+	public void perform(Run<?, ?> run, FilePath workspace, Launcher launcher, TaskListener taskListener) {
     	// for implements SimpleBuildStep		
-		perform(run, taskListener);
+		perform(run, taskListener, workspace);
 	}
 
 	/**
 	 * Common method to process the build result file
-	 * @param build
-	 * @param taskListener
-	 * @return
+	 * @param build Current build
+	 * @param taskListener Used to print in the console output
 	 */
-	private boolean perform(Run<?, ?> build, TaskListener taskListener) {
+	private boolean perform(final Run<?, ?> build, final TaskListener taskListener, FilePath ws) {
 		
-    	File f;
+    	final FilePath f;
     	if(consoleOrFile==null || consoleOrFile.isEmpty() || CONSOLE.equals(consoleOrFile)) {
-    		f = build.getLogFile();
+    		f = new FilePath(build.getLogFile());
     	} else {
         	String wsBasePath = "";
         	try {
         		wsBasePath = build.getEnvironment(taskListener).get("WORKSPACE");
 			} catch (IOException | InterruptedException e) {
-				if(taskListener!=null) {
-					taskListener.getLogger().println("The environment variable WORKSPACE doesn't exists");
-				}
+				taskListener.getLogger().println("The environment variable WORKSPACE doesn't exists");
 				Logger log = LogManager.getLogManager().getLogger("hudson.WebAppMain");
 				log.log(Level.SEVERE, "The environment variable WORKSPACE doesn't exists", e);
 			}
@@ -142,29 +134,34 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
         	String prepareFileLocation = resultFile
         			.replace("${WORKSPACE}", wsBasePath)
         			.replace("%WORKSPACE%", wsBasePath);
-        	f = new File(prepareFileLocation);    		
+        	f = new FilePath(ws,prepareFileLocation);
     	}
 
-    	if(f.exists()) {
-    		if(taskListener!=null) taskListener.getLogger().println("Parsing " + f.getAbsolutePath());
-	   		
-	   		Collection coll;
-	   		try {
-	   			coll = JsonResultParser.parse(f);
-	   		} catch(Exception e) {
-	   			coll = ConsoleParser.parse(f);	   			
-	   		}
-	
-			StoplightReportBuildAction buildAction = new StoplightReportBuildAction(build, coll);
-			build.addAction(buildAction);
-			return true;			
-    	} else {
-    		if(taskListener!=null) taskListener.getLogger().println("The file " + resultFile + " doesn't exists");
-    		return false;
-    	}
+		try {
+			if(!f.exists()) {
+                throw new FileNotFoundException();
+			}
+            if(taskListener!=null){
+                taskListener.getLogger().println("Parsing " + f.toURI());
+            }
+
+            Collection coll;
+            try {
+                coll = JsonResultParser.parse(f.read());
+            } catch(Exception e) {
+                coll = ConsoleParser.parse(f.read());
+            }
+
+            StoplightReportBuildAction buildAction = new StoplightReportBuildAction(build, coll);
+            build.addAction(buildAction);
+            return true;
+		} catch (IOException | InterruptedException e) {
+            if(taskListener!=null){
+                taskListener.getLogger().println("The file " + f.getName() + " doesn't exists");
+            }
+            return false;
+		}
 	}
-	
-    
     
     // Overridden for better type safety.
     // If your plugin doesn't really define any property on Descriptor,

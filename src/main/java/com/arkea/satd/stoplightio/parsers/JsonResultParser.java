@@ -15,12 +15,8 @@
  */
 package com.arkea.satd.stoplightio.parsers;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import com.arkea.satd.stoplightio.model.Assertion;
 import com.arkea.satd.stoplightio.model.Collection;
@@ -45,19 +41,18 @@ public final class JsonResultParser {
 	 * Parser for Prism JSON output
 	 * @param resultFile File to be parsed
 	 * @return a Collection object filled with the results
-	 * @throws FileNotFoundException throwed if resultFile is not found
 	 * @throws UnsupportedEncodingException throwed if resultFile is not JSON compliant
 	 */
-	public static Collection parse(final File resultFile) throws FileNotFoundException, UnsupportedEncodingException {
+	public static Collection parse(final InputStream resultFile) throws UnsupportedEncodingException {
 		
 		// Result initialization
 		final Collection collection = new Collection();
 
 		int totalTests = 0;
 		int succeededTests = 0;
-		
-		final FileInputStream fis = new FileInputStream(resultFile);
-		final BufferedReader br = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
+
+
+		final BufferedReader br = new BufferedReader(new InputStreamReader(resultFile, StandardCharsets.UTF_8));
 		final JsonObject jsonObj = new JsonParser().parse(br).getAsJsonObject();
 		
 		// Iterate on section level : 

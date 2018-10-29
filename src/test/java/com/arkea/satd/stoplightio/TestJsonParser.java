@@ -15,14 +15,13 @@
  */
 package com.arkea.satd.stoplightio;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
-
 import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.parsers.JsonResultParser;
-
+import hudson.FilePath;
 import junit.framework.TestCase;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Simple Test for Console Parser
@@ -37,8 +36,10 @@ public class TestJsonParser extends TestCase{
 		
 		Collection coll;
 		try {
-			coll = JsonResultParser.parse(new File(fileLocation));
-			
+			File testFile = new File(fileLocation);
+			FilePath fp =  new FilePath(testFile);
+			coll = JsonResultParser.parse(fp.read());
+
 			assertNotNull(coll);
 
 			System.out.println(coll.getSucceededTests() + " test(s) passed on " + coll.getTotalTests() );
@@ -46,9 +47,7 @@ public class TestJsonParser extends TestCase{
 			assertEquals(56, coll.getSucceededTests());
 			assertEquals(56, coll.getTotalTests());
 
-		} catch (FileNotFoundException e) {
-			fail();
-		} catch (UnsupportedEncodingException e) {
+		} catch (IOException | InterruptedException e) {
 			fail();
 		}
 

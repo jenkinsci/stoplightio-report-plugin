@@ -15,11 +15,7 @@
  */
 package com.arkea.satd.stoplightio.parsers;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -55,7 +51,7 @@ public final class ConsoleParser {
 	 * @param consoleFile File to be parsed
 	 * @return a Collection object filled with the results
 	 */
-	public static Collection parse(final File consoleFile) {
+	public static Collection parse(final InputStream consoleFile) {
 		
 		// Result initialization
 		final Collection collection = new Collection();
@@ -63,12 +59,12 @@ public final class ConsoleParser {
 		int totalTests = 0;
 		int succeededTests = 0;
 		
-		// File parsing		
+		// File parsing
 		FileInputStream fis = null;
 		BufferedReader br = null;
 		try {
-			fis = new FileInputStream(consoleFile);
-			br = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
+
+			br = new BufferedReader(new InputStreamReader(consoleFile, "UTF-8"));
 			
 			Scenario currentScenario = null;
 			Step currentStep = null;
