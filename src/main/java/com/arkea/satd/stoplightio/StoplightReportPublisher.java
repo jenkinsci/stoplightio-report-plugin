@@ -1,20 +1,19 @@
 /*
  * Copyright 2017 Credit Mutuel Arkea
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * See the License for the specific language governing permissions and 
  * limitations under the License.
  */
 package com.arkea.satd.stoplightio;
-
 import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.parsers.ConsoleParser;
 import com.arkea.satd.stoplightio.parsers.JsonResultParser;
@@ -38,19 +37,19 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
- * Publisher Plugin for Stoplight / Scenario / Prism
- * <p>
- * When a build is performed, the {@link #perform} method will be invoked.
+ * Publisher Plugin for Stoplight / Scenario / Prism 
+ *
+ * When a build is performed, the {@link #perform} method will be invoked. 
  *
  * @author Nicolas TISSERAND
  */
 public class StoplightReportPublisher extends Recorder implements SimpleBuildStep {
 
-    ////config.jelly fields
-    private final String consoleOrFile;
-    private final String resultFile;
-
-    private static final String CONSOLE = "console";
+	////config.jelly fields
+	private final String consoleOrFile;
+	private final String resultFile;
+	
+	private static final String CONSOLE = "console";
 
     // Fields in config.jelly must match the parameter names in the "DataBoundConstructor"
     @DataBoundConstructor
@@ -60,20 +59,19 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
     }
 
     public String getConsoleOrFile() {
-        return consoleOrFile;
-    }
+		return consoleOrFile;
+	}
 
-    public static String getConsole() {
-        return CONSOLE;
-    }
+	public static String getConsole() {
+		return CONSOLE;
+	}
 
-    public BuildStepMonitor getRequiredMonitorService() {
+	public BuildStepMonitor getRequiredMonitorService() {
         return BuildStepMonitor.NONE;
     }
-
-    /**
+	
+	/**
      * Used in {@code config.jelly}.
-     *
      * @return The path of the file to parse
      */
     public String getResultFile() {
@@ -83,91 +81,90 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
     /**
      * Used in {@code config.jelly}.
      * Manage the checking of radioBlock.
-     * By default, console is checked
-     *
+     * By default, console is checked  
      * @param testTypeName accepted values : "console" or "file"
-     * @return true if testTypeName is null or empty or equals to "console"
+     * @return true if testTypeName is null or empty or equals to "console" 
      */
     public String isTestType(String testTypeName) {
-
-        if (consoleOrFile == null) {
-            return CONSOLE.equals(testTypeName) ? "true" : "";
-        } else {
-            return consoleOrFile.equalsIgnoreCase(testTypeName) ? "true" : "";
-        }
-    }
-
-
+    	
+    	if(consoleOrFile==null) {
+    		return CONSOLE.equals(testTypeName) ? "true" : "";
+    	} else {
+    		return consoleOrFile.equalsIgnoreCase(testTypeName) ? "true" : "";
+    	}
+    }    
+    
+    
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) {
-        // for extends Recorder
-        return perform(build, listener, build.getWorkspace());
+    	// for extends Recorder
+		return perform(build, listener, build.getWorkspace());
     }
 
-    @Override
-    public void perform(Run<?, ?> run, FilePath workspace, Launcher launcher, TaskListener taskListener) {
-        // for implements SimpleBuildStep
-        perform(run, taskListener, workspace);
-    }
+	@Override
+	public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener taskListener) {
+    	// for implements SimpleBuildStep		
+		perform(run, taskListener, workspace);
+	}
 
-    /**
-     * Common method to process the build result file
-     *
-     * @param build        Current build
-     * @param taskListener Used to print in the console output
-     */
-    private boolean perform(final Run<?, ?> build, final TaskListener taskListener, FilePath ws) {
+	/**
+	 * Common method to process the build result file
+	 * @param build Current build
+	 * @param taskListener Used to print in the console output
+	 */
+	private boolean perform(final Run<?, ?> build, final TaskListener taskListener, FilePath ws) {
+		
+    	final FilePath f;
+    	if(consoleOrFile==null || consoleOrFile.isEmpty() || CONSOLE.equals(consoleOrFile)) {
+    		f = new FilePath(build.getLogFile());
+    	} else {
+        	String wsBasePath = "";
+        	try {
+        		wsBasePath = build.getEnvironment(taskListener).get("WORKSPACE");
+			} catch (IOException | InterruptedException e) {
+				taskListener.getLogger().println("The environment variable WORKSPACE doesn't exists");
+				Logger log = LogManager.getLogManager().getLogger("hudson.WebAppMain");
+				log.log(Level.SEVERE, "The environment variable WORKSPACE doesn't exists", e);
+			}
 
-        final FilePath f;
-        if (consoleOrFile == null || consoleOrFile.isEmpty() || CONSOLE.equals(consoleOrFile)) {
-            f = new FilePath(build.getLogFile());
-        } else {
-            String wsBasePath = "";
-            try {
-                wsBasePath = build.getEnvironment(taskListener).get("WORKSPACE");
-            } catch (IOException | InterruptedException e) {
-                taskListener.getLogger().println("The environment variable WORKSPACE doesn't exists");
-                Logger log = LogManager.getLogManager().getLogger("hudson.WebAppMain");
-                log.log(Level.SEVERE, "The environment variable WORKSPACE doesn't exists", e);
-            }
+			if(wsBasePath==null) {
+				wsBasePath = "";
+			}
+        	String prepareFileLocation = resultFile
+        			.replace("${WORKSPACE}", wsBasePath)
+        			.replace("%WORKSPACE%", wsBasePath);
+        	f = new FilePath(ws,prepareFileLocation);
+    	}
 
-            if (wsBasePath == null) {
-                wsBasePath = "";
-            }
-            String prepareFileLocation = resultFile
-                    .replace("${WORKSPACE}", wsBasePath)
-                    .replace("%WORKSPACE%", wsBasePath);
-            f = new FilePath(ws, prepareFileLocation);
-        }
+		try {
+			if(f.exists()){
+				if(taskListener!=null) taskListener.getLogger().println("Parsing " + f.toURI());
 
-        try {
-            if (f.exists()) {
-                if (taskListener != null) taskListener.getLogger().println("Parsing " + f.toURI());
+				Collection coll;
+				try {
+					coll = JsonResultParser.parse(f.read());
+				} catch(Exception e) {
+					coll = ConsoleParser.parse(f.read());
+				}
 
-                Collection coll;
-                try {
-                    coll = JsonResultParser.parse(f.read());
-                } catch (Exception e) {
-                    coll = ConsoleParser.parse(f.read());
-                }
-
-                StoplightReportBuildAction buildAction = new StoplightReportBuildAction(build, coll);
-                build.addAction(buildAction);
-                return true;
-            }
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (taskListener != null) taskListener.getLogger().println("The file " + f.getName() + " doesn't exists");
-        return false;
-    }
-
+				StoplightReportBuildAction buildAction = new StoplightReportBuildAction(build, coll);
+				build.addAction(buildAction);
+				return true;
+			}
+			if(taskListener!=null) taskListener.getLogger().println("The file " + f.toURI() + " doesn't exists");
+			return false;
+		} catch (IOException | InterruptedException e) {
+			if(taskListener!=null) taskListener.getLogger().println(e);
+			return false;
+		}
+	}
+    
     // Overridden for better type safety.
     // If your plugin doesn't really define any property on Descriptor,
     // you don't have to do this.
     @Override
     public DescriptorImpl getDescriptor() {
-        return (DescriptorImpl) super.getDescriptor();
+        return (DescriptorImpl)super.getDescriptor();
     }
 
     /**
@@ -182,7 +179,7 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
         /**
-         * In order to load the persisted global configuration, you have to
+         * In order to load the persisted global configuration, you have to 
          * call load() in the constructor.
          */
         public DescriptorImpl() {
@@ -192,12 +189,14 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
         /**
          * Performs on-the-fly validation of the form field 'name'.
          *
-         * @param value This parameter receives the value that the user has typed.
-         * @return Indicates the outcome of the validation. This is sent to the browser.
-         * <p>
-         * Note that returning {@link FormValidation#error(String)} does not
-         * prevent the form from being saved. It just means that a message
-         * will be displayed to the user.
+         * @param value
+         *      This parameter receives the value that the user has typed.
+         * @return
+         *      Indicates the outcome of the validation. This is sent to the browser.
+         *      <p>
+         *      Note that returning {@link FormValidation#error(String)} does not
+         *      prevent the form from being saved. It just means that a message
+         *      will be displayed to the user. 
          */
         public FormValidation doCheckResultFile(@QueryParameter String value) {
             if (value.length() == 0)
@@ -222,6 +221,6 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
         }
 
     }
-
+	
 }
 

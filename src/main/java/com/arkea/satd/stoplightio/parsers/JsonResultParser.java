@@ -107,7 +107,7 @@ public final class JsonResultParser {
 								final JsonElement pass = assertion.get("pass");
 								
 								final Assertion assrt = new Assertion();
-								assrt.setSuccess(pass!=null?pass.getAsBoolean():false);
+								assrt.setSuccess(pass != null && pass.getAsBoolean());
 								assrt.setMessage( target.getAsString() + " (" + assertion.get("op").getAsString() + ") " + (assertion.get("expected").isJsonObject() ? "against JSON Schema" : assertion.get("expected").getAsString()) );					
 								currentStep.getAssertions().add(assrt);
 								
