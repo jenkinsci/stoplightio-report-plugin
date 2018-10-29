@@ -17,12 +17,11 @@ package com.arkea.satd.stoplightio;
 
 import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.parsers.JsonResultParser;
+import hudson.FilePath;
 import junit.framework.TestCase;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Simple Test for Console Parser
@@ -38,8 +37,8 @@ public class TestJsonParser extends TestCase{
 		Collection coll;
 		try {
 			File testFile = new File(fileLocation);
-			InputStream testStream = new FileInputStream(testFile);
-			coll = JsonResultParser.parse(testStream);
+			FilePath fp = new FilePath(testFile);
+			coll = JsonResultParser.parse(fp.read());
 
 			assertNotNull(coll);
 
@@ -48,10 +47,9 @@ public class TestJsonParser extends TestCase{
 			assertEquals(56, coll.getSucceededTests());
 			assertEquals(56, coll.getTotalTests());
 
-		} catch (IOException e) {
+		} catch (IOException | InterruptedException e) {
 			fail();
 		}
-
 	}
 
 }
