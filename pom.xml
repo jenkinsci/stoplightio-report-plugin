@@ -11,7 +11,7 @@
   
   <groupId>com.arkea.satd</groupId>
   <artifactId>stoplightio-report</artifactId>
-  <version>2.2.2-SNAPSHOT</version>
+  <version>2.2.2</version>
   <packaging>hpi</packaging>
 
   <properties>
@@ -53,7 +53,7 @@
     <connection>scm:git:git://ssh.github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
     <developerConnection>scm:git:git@ssh.github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-    <tag>HEAD</tag>
+    <tag>stoplightio-report-2.2.2</tag>
   </scm>
    
   <repositories>
