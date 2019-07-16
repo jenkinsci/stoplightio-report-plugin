@@ -14,28 +14,34 @@
  * limitations under the License.
  */
 package com.arkea.satd.stoplightio;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.QueryParameter;
+
 import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.parsers.ConsoleParser;
 import com.arkea.satd.stoplightio.parsers.JsonResultParser;
+
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.*;
+import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+import hudson.model.BuildListener;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
 import hudson.util.FormValidation;
 import jenkins.tasks.SimpleBuildStep;
-import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
-
-import javax.annotation.Nonnull;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 /**
  * Publisher Plugin for Stoplight / Scenario / Prism 
@@ -146,10 +152,19 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
             }
 
             Collection coll;
+            InputStream is = f.read();
             try {
-                coll = JsonResultParser.parse(f.read());
+                coll = JsonResultParser.parse(is);
             } catch(Exception e) {
-                coll = ConsoleParser.parse(f.read());
+                coll = ConsoleParser.parse(is);
+            } finally {
+    			if(is!=null) {
+    				try {
+    					is.close();
+    				} catch (IOException e) {
+    					// Nothing to do
+    				}
+    			}
             }
 
             StoplightReportBuildAction buildAction = new StoplightReportBuildAction(build, coll);

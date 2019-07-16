@@ -17,6 +17,7 @@ package com.arkea.satd.stoplightio.parsers;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -60,11 +61,11 @@ public final class ConsoleParser {
 		int succeededTests = 0;
 		
 		// File parsing
-		FileInputStream fis = null;
+		InputStreamReader isr = null;
 		BufferedReader br = null;
 		try {
-
-			br = new BufferedReader(new InputStreamReader(consoleFile, "UTF-8"));
+			isr = new InputStreamReader(consoleFile, "UTF-8");
+			br = new BufferedReader(isr);
 			
 			Scenario currentScenario = null;
 			Step currentStep = null;
@@ -99,7 +100,11 @@ public final class ConsoleParser {
 				if(m.matches()) {
 					final Assertion assertion = new Assertion();
 					assertion.setSuccess(SUCCESS_MARK.equals(m.group(1)));
-					assertion.setMessage(m.group(2));					
+					assertion.setMessage(m.group(2));
+					
+					if(currentStep.getAssertions()==null){
+						currentStep.setAssertions(new ArrayList<Assertion>() );
+					}
 					currentStep.getAssertions().add(assertion);
 					
 					// Global stats for collection
@@ -117,9 +122,9 @@ public final class ConsoleParser {
 			Logger logger = LogManager.getLogManager().getLogger("hudson.WebAppMain");
 			logger.log(Level.SEVERE, "Error while parsing the console default output", e);
 		} finally {
-			if(fis!=null) {
+			if(isr!=null) {
 				try {
-					fis.close();
+					isr.close();
 				} catch (IOException e) {
 					// Nothing to do
 				}
