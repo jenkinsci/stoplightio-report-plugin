@@ -11,7 +11,7 @@
   
   <groupId>com.arkea.satd</groupId>
   <artifactId>stoplightio-report</artifactId>
-  <version>2.2.2</version>
+  <version>2.2.2-SNAPSHOT</version>
   <packaging>hpi</packaging>
 
   <properties>
