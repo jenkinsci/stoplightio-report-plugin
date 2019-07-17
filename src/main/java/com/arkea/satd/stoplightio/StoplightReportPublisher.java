@@ -218,6 +218,7 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
         /**
          * Indicates that this builder can be used with all kinds of project types
          */
+        @SuppressWarnings("rawtypes")
         public boolean isApplicable(Class<? extends AbstractProject> aClass) {
             return true;
         }
