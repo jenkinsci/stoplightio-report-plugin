@@ -32,18 +32,12 @@ public class TestFull extends TestCase {
 		File testFile = new File(fileLocation);
 		FilePath fp = new FilePath(testFile);
 		try {
-			coll = JsonResultParser.parse(fp.read());
+			coll = JsonResultParser.parse(fp);
 		} catch(Exception e) {
 			assertNull(coll);
 			System.out.println("JsonResultParser failed, using ConsoleParser");
-			try {
-				coll = ConsoleParser.parse(fp.read());
-			} catch (IOException | InterruptedException e1) {
-				fail();
-			}
+			coll = ConsoleParser.parse(fp);
 		}
-
-
    		
 		assertNotNull(coll);
 

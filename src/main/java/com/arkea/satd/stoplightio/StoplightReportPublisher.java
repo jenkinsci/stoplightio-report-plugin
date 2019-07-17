@@ -16,7 +16,6 @@
 package com.arkea.satd.stoplightio;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -152,19 +151,10 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
             }
 
             Collection coll;
-            InputStream is = f.read();
             try {
-                coll = JsonResultParser.parse(is);
+                coll = JsonResultParser.parse(f);
             } catch(Exception e) {
-                coll = ConsoleParser.parse(is);
-            } finally {
-    			if(is!=null) {
-    				try {
-    					is.close();
-    				} catch (IOException e) {
-    					// Nothing to do
-    				}
-    			}
+            	coll = ConsoleParser.parse(f);
             }
 
             StoplightReportBuildAction buildAction = new StoplightReportBuildAction(build, coll);

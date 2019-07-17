@@ -15,8 +15,11 @@
  */
 package com.arkea.satd.stoplightio.parsers;
 
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -28,6 +31,8 @@ import com.arkea.satd.stoplightio.model.Assertion;
 import com.arkea.satd.stoplightio.model.Collection;
 import com.arkea.satd.stoplightio.model.Scenario;
 import com.arkea.satd.stoplightio.model.Step;
+
+import hudson.FilePath;
 
 /**
  * Parser for a log in console format
@@ -42,17 +47,17 @@ public final class ConsoleParser {
 	private static final Pattern ASSERTION_LINE_PATTERN = Pattern.compile("^\\s{9}(\\S)  (.*)");
 	
 	// E2 9C 93
-	private static final String SUCCESS_MARK = new String(new byte[]{-30, -100, -109}, Charset.forName("UTF-8"));
+	private static final String SUCCESS_MARK = new String(new byte[]{-30, -100, -109}, StandardCharsets.UTF_8);
 	
 	private ConsoleParser() {
 	}
 	
 	/**
 	 * Parser for Prism console output
-	 * @param consoleFile File to be parsed
+	 * @param filepath FilePath to be parsed
 	 * @return a Collection object filled with the results
 	 */
-	public static Collection parse(final InputStream consoleFile) {
+	public static Collection parse(final FilePath filepath) {
 		
 		// Result initialization
 		final Collection collection = new Collection();
@@ -61,10 +66,12 @@ public final class ConsoleParser {
 		int succeededTests = 0;
 		
 		// File parsing
+		InputStream is = null;
 		InputStreamReader isr = null;
 		BufferedReader br = null;
 		try {
-			isr = new InputStreamReader(consoleFile, "UTF-8");
+			is = filepath.read();
+			isr = new InputStreamReader(is, StandardCharsets.UTF_8);
 			br = new BufferedReader(isr);
 			
 			Scenario currentScenario = null;
@@ -113,15 +120,20 @@ public final class ConsoleParser {
 						succeededTests++;
 					}
 				}
-				
 			}
-			
-			br.close();		
-		
-		} catch (IOException e) {
+
+		} catch (IOException | InterruptedException e) {
 			Logger logger = LogManager.getLogManager().getLogger("hudson.WebAppMain");
 			logger.log(Level.SEVERE, "Error while parsing the console default output", e);
 		} finally {
+			if(br!=null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					// Nothing to do
+				}
+			}
+
 			if(isr!=null) {
 				try {
 					isr.close();
@@ -130,14 +142,13 @@ public final class ConsoleParser {
 				}
 			}
 			
-			if(br!=null) {
+			if(is!=null) {
 				try {
-					br.close();
+					is.close();
 				} catch (IOException e) {
 					// Nothing to do
 				}
 			}
-			
 		}
 		
 		// Global stats

@@ -15,7 +15,10 @@
  */
 package com.arkea.satd.stoplightio.parsers;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 import com.arkea.satd.stoplightio.model.Assertion;
@@ -26,6 +29,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import hudson.FilePath;
 
 /**
  * Parser for a log in JSON format
@@ -39,11 +44,12 @@ public final class JsonResultParser {
 	
 	/**
 	 * Parser for Prism JSON output
-	 * @param resultFile File to be parsed
+	 * @param filepath FilePath to be parsed
 	 * @return a Collection object filled with the results
-	 * @throws UnsupportedEncodingException throwed if resultFile is not JSON compliant
+	 * @throws InterruptedException thrown if resultFile is not readable
+	 * @throws IOException thrown if resultFile is not readable or if if resultFile is not JSON compliant
 	 */
-	public static Collection parse(final InputStream resultFile) throws UnsupportedEncodingException {
+	public static Collection parse(final FilePath filepath) throws InterruptedException, IOException {
 		
 		// Result initialization
 		final Collection collection = new Collection();
@@ -51,10 +57,12 @@ public final class JsonResultParser {
 		int totalTests = 0;
 		int succeededTests = 0;
 
+		InputStream is = null;
 		InputStreamReader isr = null;
 		BufferedReader br = null;
 		try {
-			isr = new InputStreamReader(resultFile, StandardCharsets.UTF_8);
+			is = filepath.read();			
+			isr = new InputStreamReader(is, StandardCharsets.UTF_8);
 			br = new BufferedReader(isr);
 			final JsonObject jsonObj = new JsonParser().parse(br).getAsJsonObject();
 		
@@ -110,7 +118,7 @@ public final class JsonResultParser {
 									final JsonElement pass = assertion.get("pass");
 									
 									final Assertion assrt = new Assertion();
-									assrt.setSuccess(pass!=null?pass.getAsBoolean():false);
+									assrt.setSuccess( pass!=null && pass.getAsBoolean());
 									assrt.setMessage( target.getAsString() + " (" + assertion.get("op").getAsString() + ") " + (assertion.get("expected").isJsonObject() ? "against JSON Schema" : assertion.get("expected").getAsString()) );					
 									currentStep.getAssertions().add(assrt);
 									
@@ -128,7 +136,14 @@ public final class JsonResultParser {
 			}			
 			
 		} finally {
-			// Close resources
+			if(br!=null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					// Nothing to do
+				}
+			}
+
 			if(isr!=null) {
 				try {
 					isr.close();
@@ -137,9 +152,9 @@ public final class JsonResultParser {
 				}
 			}
 			
-			if(br!=null) {
+			if(is!=null) {
 				try {
-					br.close();
+					is.close();
 				} catch (IOException e) {
 					// Nothing to do
 				}

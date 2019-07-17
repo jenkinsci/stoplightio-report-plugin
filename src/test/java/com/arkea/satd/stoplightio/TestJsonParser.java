@@ -38,7 +38,7 @@ public class TestJsonParser extends TestCase{
 		try {
 			File testFile = new File(fileLocation);
 			FilePath fp =  new FilePath(testFile);
-			coll = JsonResultParser.parse(fp.read());
+			coll = JsonResultParser.parse(fp);
 
 			assertNotNull(coll);
 

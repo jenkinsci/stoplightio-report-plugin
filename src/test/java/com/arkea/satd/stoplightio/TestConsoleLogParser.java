@@ -35,13 +35,9 @@ public class TestConsoleLogParser extends TestCase{
 		String fileLocation = "prism_console.log";
 
 		Collection coll = null;
-		try {
-			File testFile = new File(fileLocation);
-			FilePath fp = new FilePath(testFile);
-			coll = ConsoleParser.parse(fp.read());
-		} catch (IOException | InterruptedException e) {
-			fail();
-		}
+		File testFile = new File(fileLocation);
+		FilePath fp = new FilePath(testFile);
+		coll = ConsoleParser.parse(fp);
 
 		assertNotNull(coll);
 
