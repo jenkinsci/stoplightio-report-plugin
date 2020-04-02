@@ -128,9 +128,9 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
         	try {
         		wsBasePath = build.getEnvironment(taskListener).get("WORKSPACE");
 			} catch (IOException | InterruptedException e) {
-				taskListener.getLogger().println("The environment variable WORKSPACE doesn't exists");
+				taskListener.getLogger().println("The environment variable WORKSPACE does not exists");
 				Logger log = LogManager.getLogManager().getLogger("hudson.WebAppMain");
-				log.log(Level.SEVERE, "The environment variable WORKSPACE doesn't exists", e);
+				log.log(Level.SEVERE, "The environment variable WORKSPACE does not exists", e);
 			}
 
 			if(wsBasePath==null) {
@@ -149,14 +149,8 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
             if(taskListener!=null){
                 taskListener.getLogger().println("Parsing " + f.toURI());
             }
-
-            Collection coll;
-            try {
-                coll = JsonResultParser.parse(f);
-            } catch(Exception e) {
-            	coll = ConsoleParser.parse(f);
-            }
-
+            
+            Collection coll= getCollectionFromFile(f);
             StoplightReportBuildAction buildAction = new StoplightReportBuildAction(build, coll);
             build.addAction(buildAction);
             return true;
@@ -232,5 +226,15 @@ public class StoplightReportPublisher extends Recorder implements SimpleBuildSte
 
     }
 	
+    
+    private Collection getCollectionFromFile(FilePath input) {
+        Collection coll;
+        try {
+            coll = JsonResultParser.parse(input);
+        } catch(Exception e) {
+        	coll = ConsoleParser.parse(input);
+        }
+        return coll;
+    }
 }
 

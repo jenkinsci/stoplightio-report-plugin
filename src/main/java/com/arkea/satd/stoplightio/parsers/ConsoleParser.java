@@ -66,13 +66,10 @@ public final class ConsoleParser {
 		int succeededTests = 0;
 		
 		// File parsing
-		InputStream is = null;
-		InputStreamReader isr = null;
-		BufferedReader br = null;
-		try {
-			is = filepath.read();
-			isr = new InputStreamReader(is, StandardCharsets.UTF_8);
-			br = new BufferedReader(isr);
+		try (InputStream is = filepath.read();
+				InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+				BufferedReader br = new BufferedReader(isr);
+			) {
 			
 			Scenario currentScenario = null;
 			Step currentStep = null;
@@ -131,30 +128,6 @@ public final class ConsoleParser {
 		} catch (IOException | InterruptedException e) {
 			Logger logger = LogManager.getLogManager().getLogger("hudson.WebAppMain");
 			logger.log(Level.SEVERE, "Error while parsing the console default output", e);
-		} finally {
-			if(br!=null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					// Nothing to do
-				}
-			}
-
-			if(isr!=null) {
-				try {
-					isr.close();
-				} catch (IOException e) {
-					// Nothing to do
-				}
-			}
-			
-			if(is!=null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					// Nothing to do
-				}
-			}
 		}
 		
 		// Global stats

@@ -57,13 +57,12 @@ public final class JsonResultParser {
 		int totalTests = 0;
 		int succeededTests = 0;
 
-		InputStream is = null;
-		InputStreamReader isr = null;
-		BufferedReader br = null;
-		try {
-			is = filepath.read();			
-			isr = new InputStreamReader(is, StandardCharsets.UTF_8);
-			br = new BufferedReader(isr);
+
+		try (InputStream is = filepath.read();
+				InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+				BufferedReader br = new BufferedReader(isr);
+			) {
+			
 			final JsonObject jsonObj = new JsonParser().parse(br).getAsJsonObject();
 		
 			// Iterate on section level : 
@@ -134,31 +133,6 @@ public final class JsonResultParser {
 					} // scenario level
 				} // top level (section)
 			}			
-			
-		} finally {
-			if(br!=null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					// Nothing to do
-				}
-			}
-
-			if(isr!=null) {
-				try {
-					isr.close();
-				} catch (IOException e) {
-					// Nothing to do
-				}
-			}
-			
-			if(is!=null) {
-				try {
-					is.close();
-				} catch (IOException e) {
-					// Nothing to do
-				}
-			}
 		}
 		
 		// Global stats
