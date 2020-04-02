@@ -101,6 +101,9 @@ public final class ConsoleParser {
 					if(m2.matches()) {
 						currentStep.setVerb(m2.group(1));
 						currentStep.setUrl(m2.group(2));
+					} else {
+						currentStep.setVerb("");
+						currentStep.setUrl("");
 					}
 					currentScenario.getSteps().add(currentStep);
 				}
