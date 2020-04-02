@@ -43,7 +43,7 @@ public final class ConsoleParser {
 
 	// Useful patterns for console parsing
 	private static final Pattern SCENARIO_LINE_PATTERN = Pattern.compile("^\\s{4}(\\S.*) \\((.*)\\)");
-	private static final Pattern STEP_LINE_PATTERN = Pattern.compile("^\\s{6}(.*), (.*) (.*) \\((.*)\\)");
+	private static final Pattern STEP_LINE_PATTERN = Pattern.compile("^\\s{6}(.*), (.*) \\((.*)\\)");
 	private static final Pattern ASSERTION_LINE_PATTERN = Pattern.compile("^\\s{9}(\\S)  (.*)");
 	
 	// E2 9C 93
@@ -96,9 +96,15 @@ public final class ConsoleParser {
 				if(m.matches()) {
 					currentStep = new Step();
 					currentStep.setLabel(m.group(1));
-					currentStep.setVerb(m.group(2));
-					currentStep.setUrl(m.group(3));
-					currentStep.setDuration(m.group(4));
+					currentStep.setDuration(m.group(3));
+					Matcher m2 = Pattern.compile("(.*) (.*)").matcher(m.group(2));
+					if(m2.matches()) {
+						currentStep.setVerb(m2.group(1));
+						currentStep.setUrl(m2.group(2));
+					} else {
+						currentStep.setVerb("");
+						currentStep.setUrl("");
+					}
 					currentScenario.getSteps().add(currentStep);
 				}
 				
